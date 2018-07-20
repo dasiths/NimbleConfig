@@ -7,7 +7,7 @@ using NimbleConfig.Core.Configuration;
 
 namespace NimbleConfig.Sample.Settings
 {
-    [SettingInfo(Key = "SomeCustomNamedSetting")]
+    [SettingInfo(Key = "Some:CustomNamedSetting")]
     public class CustomKeySetting: ConfigurationSetting<decimal>
     {
     }
