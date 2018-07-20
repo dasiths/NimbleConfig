@@ -16,6 +16,8 @@ namespace NimbleConfig.Core.Factory
 
         public dynamic CreateConfigurationSetting(Type configType)
         {
+            // Todo: handle missing config settings
+
             dynamic config = Activator.CreateInstance(configType);
 
             var key = GetKeyName(configType);
@@ -40,7 +42,7 @@ namespace NimbleConfig.Core.Factory
         {
             var attribute = type.CustomAttributes.SingleOrDefault(c => c.AttributeType == typeof(SettingInfo));
 
-            if (attribute != null)
+            if (attribute?.NamedArguments != null)
             {
                 var keyName = attribute.NamedArguments.SingleOrDefault(a => a.MemberName == nameof(SettingInfo.Key));
                 return keyName.TypedValue.Value.ToString();
