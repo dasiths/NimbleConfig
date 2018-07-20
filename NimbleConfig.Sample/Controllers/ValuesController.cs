@@ -10,17 +10,17 @@ namespace NimbleConfig.Sample.Controllers
         private readonly SomeSetting _someSetting;
         private readonly SomeNumber _someNumber;
         private readonly SomeComplexType _someComplexType;
-        private readonly VeryStrangeType _veryStrangeType;
+        private readonly VeryStrangeSetting _veryStrangeSetting;
 
         public ValuesController(SomeSetting someSetting, 
             SomeNumber someNumber, 
             SomeComplexType someComplexType, 
-            VeryStrangeType veryStrangeType)
+            VeryStrangeSetting veryStrangeSetting)
         {
             _someSetting = someSetting;
             _someNumber = someNumber;
             _someComplexType = someComplexType;
-            _veryStrangeType = veryStrangeType;
+            _veryStrangeSetting = veryStrangeSetting;
         }
         // GET api/values
         [HttpGet]
@@ -31,7 +31,7 @@ namespace NimbleConfig.Sample.Controllers
                 _someSetting.Value,
                 _someNumber.Value.ToString(),
                 _someComplexType.SomeProp,
-                _veryStrangeType.Value.ToString()
+                _veryStrangeSetting.Value.ToString()
             };
         }
 
