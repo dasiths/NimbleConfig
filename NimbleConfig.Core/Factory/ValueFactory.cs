@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
+using NimbleConfig.Core.Attributes;
 using NimbleConfig.Core.Extensions;
 
 namespace NimbleConfig.Core.Factory
@@ -16,7 +18,7 @@ namespace NimbleConfig.Core.Factory
         {
             dynamic config = Activator.CreateInstance(configType);
 
-            var key = configType.Name;
+            var key = GetKeyName(configType);
             object value = null;
 
             var genericType = configType.GetGenericTypeOfConfigurationSetting();
@@ -29,9 +31,22 @@ namespace NimbleConfig.Core.Factory
 
         public dynamic CreateComplexConfigurationSetting(Type configType)
         {
-            var key = configType.Name;
+            var key = GetKeyName(configType);
             var value = _configuration.ReadComplexType(configType, key);
             return value;
+        }
+
+        private string GetKeyName(Type type)
+        {
+            var attribute = type.CustomAttributes.SingleOrDefault(c => c.AttributeType == typeof(SettingInfo));
+
+            if (attribute != null)
+            {
+                var keyName = attribute.NamedArguments.SingleOrDefault(a => a.MemberName == nameof(SettingInfo.Key));
+                return keyName.TypedValue.Value.ToString();
+            }
+
+            return type.Name;
         }
     }
 }
