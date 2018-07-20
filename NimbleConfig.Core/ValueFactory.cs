@@ -14,14 +14,8 @@ namespace NimbleConfig.Core
         public dynamic CreateConfigurationSetting(Type configType) 
         {
             dynamic config = Activator.CreateInstance(configType);
-            var valueType = configType.BaseType.GetGenericArguments()[0];
-
             var value = _configuration[configType.Name];
-
-            var convertedValue = Convert.ChangeType(value, valueType);
-
-            var property = configType.GetProperty("Value");
-            property.SetValue(config, convertedValue, null);
+            config.SetValue(value);
 
             return config;
         }
