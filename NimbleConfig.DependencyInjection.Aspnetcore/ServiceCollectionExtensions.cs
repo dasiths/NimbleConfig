@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using NimbleConfig.Core;
 
-namespace NimbleConfig.Core
+namespace NimbleConfig.DependencyInjection.Aspnetcore
 {
     public static class ServiceCollectionExtensions
     {
         public static void AddConfigurationSettingsFrom(this IServiceCollection services, Assembly[] assemblies)
         {
+            services.AddSingleton<ValueFactory>();
+
             var settingTypes = GetConfigurationSettings(assemblies);
 
             foreach (var settingType in settingTypes)

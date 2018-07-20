@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NimbleConfig.Core;
+using NimbleConfig.DependencyInjection.Aspnetcore;
 
 namespace NimbleConfig.Sample
 {
@@ -26,8 +26,6 @@ namespace NimbleConfig.Sample
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSingleton<ValueFactory>();
-
             services.AddConfigurationSettingsFrom(new[] {typeof(Startup).Assembly});
         }
 

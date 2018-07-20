@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NimbleConfig.Sample", "NimbleConfig\NimbleConfig.Sample.csproj", "{1F98D70D-D247-415E-B0AC-5B2A03D19F3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NimbleConfig.Sample", "NimbleConfig.Sample\NimbleConfig.Sample.csproj", "{1F98D70D-D247-415E-B0AC-5B2A03D19F3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NimbleConfig.Core", "NimbleConfig.Core\NimbleConfig.Core.csproj", "{3A25BDC6-778E-404A-A161-F69066854FC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NimbleConfig.Core", "NimbleConfig.Core\NimbleConfig.Core.csproj", "{05DBD7A8-93C6-4CEE-9CE0-4A591F3699A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NimbleConfig.DependencyInjection.Aspnetcore", "NimbleConfig.DependencyInjection.Aspnetcore\NimbleConfig.DependencyInjection.Aspnetcore.csproj", "{898C3F61-1305-449C-A144-1027E62EAEC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,14 @@ Global
 		{1F98D70D-D247-415E-B0AC-5B2A03D19F3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F98D70D-D247-415E-B0AC-5B2A03D19F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F98D70D-D247-415E-B0AC-5B2A03D19F3D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A25BDC6-778E-404A-A161-F69066854FC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A25BDC6-778E-404A-A161-F69066854FC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A25BDC6-778E-404A-A161-F69066854FC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A25BDC6-778E-404A-A161-F69066854FC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05DBD7A8-93C6-4CEE-9CE0-4A591F3699A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05DBD7A8-93C6-4CEE-9CE0-4A591F3699A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05DBD7A8-93C6-4CEE-9CE0-4A591F3699A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05DBD7A8-93C6-4CEE-9CE0-4A591F3699A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{898C3F61-1305-449C-A144-1027E62EAEC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{898C3F61-1305-449C-A144-1027E62EAEC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{898C3F61-1305-449C-A144-1027E62EAEC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{898C3F61-1305-449C-A144-1027E62EAEC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

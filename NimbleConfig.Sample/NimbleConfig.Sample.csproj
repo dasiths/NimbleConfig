@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NimbleConfig.Core\NimbleConfig.Core.csproj" />
+    <ProjectReference Include="..\NimbleConfig.DependencyInjection.Aspnetcore\NimbleConfig.DependencyInjection.Aspnetcore.csproj" />
   </ItemGroup>
 
 </Project>
