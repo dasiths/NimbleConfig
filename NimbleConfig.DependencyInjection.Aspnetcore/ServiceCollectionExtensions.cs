@@ -14,6 +14,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             services.AddSingleton<ValueFactory>();
 
             var settingTypes = GetConfigurationSettings(assemblies);
+            var complexSettingTypes = GetComplexConfigurationSettings(assemblies);
 
             foreach (var settingType in settingTypes)
             {
@@ -21,19 +22,36 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
                         {
                             var factory = s.GetService<ValueFactory>();
                             return factory.CreateConfigurationSetting(settingType);
+
                         });
+            }
+
+            foreach (var settingType in complexSettingTypes)
+            {
+                services.AddSingleton(settingType, (s) =>
+                {
+                    var factory = s.GetService<ValueFactory>();
+                    return factory.CreateComplexConfigurationSetting(settingType);
+
+                });
             }
         }
 
         public static IEnumerable<Type> GetConfigurationSettings(Assembly[] assemblies)
         {
             var serviceType = typeof(ConfigurationSetting<>);
-
             return assemblies.SelectMany(assembly => assembly.GetTypes())
                 .Where(type => type.BaseType != null &&
                                type.BaseType.IsGenericType &&
                                type.BaseType.GetGenericTypeDefinition() == serviceType &&
                                !type.GetTypeInfo().IsAbstract);
+        }
+
+        public static IEnumerable<Type> GetComplexConfigurationSettings(Assembly[] assemblies)
+        {
+            var serviceType = typeof(IComplexConfigurationSetting);
+            return assemblies.SelectMany(assembly => assembly.GetTypes())
+                .Where(type => serviceType.IsAssignableFrom(type));
         }
     }
 }

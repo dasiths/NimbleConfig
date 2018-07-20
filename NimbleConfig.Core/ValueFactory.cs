@@ -19,5 +19,11 @@ namespace NimbleConfig.Core
 
             return config;
         }
+
+        public dynamic CreateComplexConfigurationSetting(Type configType)
+        {
+            var value = _configuration.GetSection(configType.Name).Get(configType);
+            return value;
+        }
     }
 }

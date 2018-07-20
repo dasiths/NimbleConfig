@@ -8,15 +8,20 @@ namespace NimbleConfig.Sample.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly SomeSetting _someSetting;
-        public ValuesController(SomeSetting someSetting)
+        private readonly SomeNumber _someNumber;
+        private readonly SomeComplexType _someComplexType;
+
+        public ValuesController(SomeSetting someSetting, SomeNumber someNumber, SomeComplexType someComplexType)
         {
             _someSetting = someSetting;
+            _someNumber = someNumber;
+            _someComplexType = someComplexType;
         }
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2", _someSetting.Value };
+            return new string[] { "value1", "value2", _someSetting.Value, _someNumber.Value.ToString(), _someComplexType.SomeProp };
         }
 
         // GET api/values/5
