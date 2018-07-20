@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
+using NimbleConfig.Core.Extensions;
 
-namespace NimbleConfig.Core
+namespace NimbleConfig.Core.Factory
 {
     public class ValueFactory
     {
@@ -15,25 +16,21 @@ namespace NimbleConfig.Core
         {
             dynamic config = Activator.CreateInstance(configType);
 
-            var genericType = configType.BaseType.GetGenericArguments()[0];
+            var key = configType.Name;
+            object value = null;
 
-            if (genericType.IsArray)
-            {
-                var value = _configuration.GetSection(configType.Name).Get(genericType);
-                config.SetValue(value);
-            }
-            else
-            {
-                var value = _configuration[configType.Name];
-                config.SetValue(value);
-            }
+            var genericType = configType.GetGenericTypeOfConfigurationSetting();
 
+            value = genericType.IsValueType ? _configuration.ReadValueType(key) : _configuration.ReadComplexType(genericType, key);
+
+            config.SetValue(value);
             return config;
         }
 
         public dynamic CreateComplexConfigurationSetting(Type configType)
         {
-            var value = _configuration.GetSection(configType.Name).Get(configType);
+            var key = configType.Name;
+            var value = _configuration.ReadComplexType(configType, key);
             return value;
         }
     }

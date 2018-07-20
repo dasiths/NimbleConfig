@@ -1,4 +1,4 @@
-﻿namespace NimbleConfig.Core
+﻿namespace NimbleConfig.Core.Configuration
 {
     public interface IComplexConfigurationSetting
     {

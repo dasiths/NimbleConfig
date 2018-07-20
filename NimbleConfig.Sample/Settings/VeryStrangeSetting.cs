@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using NimbleConfig.Core;
+﻿using NimbleConfig.Core.Configuration;
 
-namespace NimbleConfig.Sample
+namespace NimbleConfig.Sample.Settings
 {
     public class VeryStrangeSetting:ConfigurationSetting<int>
     {

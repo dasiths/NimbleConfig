@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using NimbleConfig.Sample.Settings;
 
 namespace NimbleConfig.Sample.Controllers
 {
@@ -9,22 +10,28 @@ namespace NimbleConfig.Sample.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly SomeSetting _someSetting;
-        private readonly SomeNumber _someNumber;
-        private readonly SomeComplexType _someComplexType;
+        private readonly SomeNumberSetting _someNumberSetting;
+        private readonly SomeComplexTypeSetting _someComplexTypeSetting;
         private readonly VeryStrangeSetting _veryStrangeSetting;
         private readonly ArraySetting _arraySetting;
+        private readonly EnumSetting _enumSetting;
+        private readonly BoolSetting _boolSetting;
 
         public ValuesController(SomeSetting someSetting,
-            SomeNumber someNumber,
-            SomeComplexType someComplexType,
+            SomeNumberSetting someNumberSetting,
+            SomeComplexTypeSetting someComplexTypeSetting,
             VeryStrangeSetting veryStrangeSetting,
-            ArraySetting arraySetting)
+            ArraySetting arraySetting,
+            EnumSetting enumSetting,
+            BoolSetting boolSetting)
         {
             _someSetting = someSetting;
-            _someNumber = someNumber;
-            _someComplexType = someComplexType;
+            _someNumberSetting = someNumberSetting;
+            _someComplexTypeSetting = someComplexTypeSetting;
             _veryStrangeSetting = veryStrangeSetting;
             _arraySetting = arraySetting;
+            _enumSetting = enumSetting;
+            _boolSetting = boolSetting;
         }
         // GET api/values
         [HttpGet]
@@ -33,10 +40,12 @@ namespace NimbleConfig.Sample.Controllers
             return new string[] { "value1",
                 "value2",
                 _someSetting.Value,
-                _someNumber.Value.ToString(),
-                _someComplexType.SomeProp,
+                _someNumberSetting.Value.ToString(),
+                _someComplexTypeSetting.SomeProp,
                 _veryStrangeSetting.Value.ToString(),
-                _arraySetting.Value.First().ToString()
+                _arraySetting.Value.First().ToString(),
+                _enumSetting.Value.ToString(),
+                _boolSetting.Value.ToString()
             };
         }
     }
