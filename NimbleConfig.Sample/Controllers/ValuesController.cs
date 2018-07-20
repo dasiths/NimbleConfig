@@ -10,18 +10,29 @@ namespace NimbleConfig.Sample.Controllers
         private readonly SomeSetting _someSetting;
         private readonly SomeNumber _someNumber;
         private readonly SomeComplexType _someComplexType;
+        private readonly VeryStrangeType _veryStrangeType;
 
-        public ValuesController(SomeSetting someSetting, SomeNumber someNumber, SomeComplexType someComplexType)
+        public ValuesController(SomeSetting someSetting, 
+            SomeNumber someNumber, 
+            SomeComplexType someComplexType, 
+            VeryStrangeType veryStrangeType)
         {
             _someSetting = someSetting;
             _someNumber = someNumber;
             _someComplexType = someComplexType;
+            _veryStrangeType = veryStrangeType;
         }
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2", _someSetting.Value, _someNumber.Value.ToString(), _someComplexType.SomeProp };
+            return new string[] { "value1",
+                "value2",
+                _someSetting.Value,
+                _someNumber.Value.ToString(),
+                _someComplexType.SomeProp,
+                _veryStrangeType.Value.ToString()
+            };
         }
 
         // GET api/values/5
