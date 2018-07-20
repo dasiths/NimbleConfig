@@ -11,11 +11,22 @@ namespace NimbleConfig.Core
             _configuration = configuration;
         }
 
-        public dynamic CreateConfigurationSetting(Type configType) 
+        public dynamic CreateConfigurationSetting(Type configType)
         {
             dynamic config = Activator.CreateInstance(configType);
-            var value = _configuration[configType.Name];
-            config.SetValue(value);
+
+            var genericType = configType.BaseType.GetGenericArguments()[0];
+
+            if (genericType.IsArray)
+            {
+                var value = _configuration.GetSection(configType.Name).Get(genericType);
+                config.SetValue(value);
+            }
+            else
+            {
+                var value = _configuration[configType.Name];
+                config.SetValue(value);
+            }
 
             return config;
         }

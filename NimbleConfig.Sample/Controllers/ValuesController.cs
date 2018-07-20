@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 
 namespace NimbleConfig.Sample.Controllers
@@ -11,16 +12,19 @@ namespace NimbleConfig.Sample.Controllers
         private readonly SomeNumber _someNumber;
         private readonly SomeComplexType _someComplexType;
         private readonly VeryStrangeSetting _veryStrangeSetting;
+        private readonly ArraySetting _arraySetting;
 
-        public ValuesController(SomeSetting someSetting, 
-            SomeNumber someNumber, 
-            SomeComplexType someComplexType, 
-            VeryStrangeSetting veryStrangeSetting)
+        public ValuesController(SomeSetting someSetting,
+            SomeNumber someNumber,
+            SomeComplexType someComplexType,
+            VeryStrangeSetting veryStrangeSetting,
+            ArraySetting arraySetting)
         {
             _someSetting = someSetting;
             _someNumber = someNumber;
             _someComplexType = someComplexType;
             _veryStrangeSetting = veryStrangeSetting;
+            _arraySetting = arraySetting;
         }
         // GET api/values
         [HttpGet]
@@ -31,33 +35,9 @@ namespace NimbleConfig.Sample.Controllers
                 _someSetting.Value,
                 _someNumber.Value.ToString(),
                 _someComplexType.SomeProp,
-                _veryStrangeSetting.Value.ToString()
+                _veryStrangeSetting.Value.ToString(),
+                _arraySetting.Value.First().ToString()
             };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
