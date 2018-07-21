@@ -1,4 +1,6 @@
 ﻿using System;
+using NimbleConfig.Core.Configuration;
+using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Options;
 using NimbleConfig.Core.Parsers;
 
@@ -9,16 +11,34 @@ namespace NimbleConfig.Core.Resolvers
         private static readonly GenericParser GenericParser = new GenericParser();
         private static readonly EnumParser EnumParser = new EnumParser();
 
-        internal static IParser GetParser(Type valueType, ConfigurationOptions configurationOptions)
+        internal static IParser ResolveParser(Type configType, ConfigurationOptions configurationOptions)
         {
-            // Todo: Guard for value types
-            // Todo: Inspect internals when choosing best parser
+            // Todo: Add guards
+
+            // Get the configuration value type
+            Type valueType = typeof(object);
+            var settingType = configType.GetConfigurationSettingType();
+
+            switch (settingType)
+            {
+                case ConfigurationSettingType.ComplexType:
+                    valueType = configType;
+                    break;
+                case ConfigurationSettingType.ValueType:
+                    valueType = configType.GetGenericTypeOfConfigurationSetting();
+                    break;
+                case ConfigurationSettingType.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
 
             // Try to resolve a custom parser defined in options
-            if (configurationOptions.ParserResolver != null)
+            var customParser = configurationOptions.ParserResolver?.Invoke(valueType);
+
+            if (customParser != null)
             {
-                var parser = configurationOptions.ParserResolver(valueType);
-                return parser;
+                return customParser;
             }
 
             if (valueType.IsEnum)

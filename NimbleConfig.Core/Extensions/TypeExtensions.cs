@@ -3,22 +3,55 @@ using NimbleConfig.Core.Configuration;
 
 namespace NimbleConfig.Core.Extensions
 {
-    internal static class TypeExtensions
+    public static class TypeExtensions
     {
+        public static ConfigurationSettingType GetConfigurationSettingType(this Type configType)
+        {
+            if (IsComplexTypeConfigurationSetting(configType))
+            {
+                return ConfigurationSettingType.ComplexType;
+            }
+
+            if (IsValueTypeConfigurationSetting(configType))
+            {
+                return ConfigurationSettingType.ValueType;
+            }
+
+            return ConfigurationSettingType.None;
+        }
+
+        public static bool IsComplexTypeConfigurationSetting(Type configType)
+        {
+            return typeof(IComplexConfigurationSetting).IsAssignableFrom(configType);
+        }
+
+        public static bool IsValueTypeConfigurationSetting(this Type configType)
+        {
+            try
+            {
+                var baseType = GetImmidiateTypeAfterObject(configType);
+                return baseType.GetGenericTypeDefinition() == typeof(ConfigurationSetting<>);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         internal static Type GetGenericTypeOfConfigurationSetting(this Type configType)
         {
             // Todo: better inspection and guards
-            var baseType = GetImmidiateTypeAfterObject(configType);
 
-            if (baseType.GetGenericTypeDefinition() == typeof(ConfigurationSetting<>))
+            if (IsValueTypeConfigurationSetting(configType))
             {
+                var baseType = GetImmidiateTypeAfterObject(configType);
                 return baseType.GetGenericArguments()[0];
             }
 
             throw new ArgumentException($"The given type {configType} is not a type of {typeof(ConfigurationSetting<>)}.", nameof(configType));
         }
 
-        private static Type GetImmidiateTypeAfterObject(Type type)
+        private static Type GetImmidiateTypeAfterObject(this Type type)
         {
             if (type.IsClass && type.BaseType != null)
             {
@@ -31,7 +64,6 @@ namespace NimbleConfig.Core.Extensions
             }
 
             throw new ArgumentException($"The given type {type} is not a class.", nameof(type));
-
         }
     }
 }

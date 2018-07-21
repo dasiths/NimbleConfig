@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using NimbleConfig.Core.Attributes;
+using NimbleConfig.Core.Configuration;
 using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Options;
 using NimbleConfig.Core.Parsers;
@@ -24,33 +25,43 @@ namespace NimbleConfig.Core.Factory
         public dynamic CreateConfigurationSetting(Type configType)
         {
             // Todo: handle missing config settings
-
-            dynamic config = Activator.CreateInstance(configType);
-            var key = KeyNameResolver.GetKeyName(configType, _configurationOptions);
-
-            // Get the configuration type
-            var genericType = configType.GetGenericTypeOfConfigurationSetting();
+            
+            // Resolve the key and prefix names
+            var key = KeyNameResolver.ResolveKeyName(configType, _configurationOptions);
 
             // Read configuration value
-            var value = genericType.IsValueType ? 
-                _configuration.ReadValueType(key) : 
-                _configuration.ReadComplexType(genericType, key);
+            var reader = ConfigurationReaderResolver.ResolveReader(configType, _configurationOptions);
+            var value = reader.Read(_configuration, configType, key);
 
             // Pick parser
-            var parser = ParserResolver.GetParser(genericType, _configurationOptions);
-            
+            var parser = ParserResolver.ResolveParser(configType, _configurationOptions);
+
             // Set the value
-            config.SetValue(value, parser);
-            return config;
+            var configSetting = CreateValue(configType, value, parser);
+            return configSetting;
+
         }
 
-        public dynamic CreateComplexConfigurationSetting(Type configType)
+        public dynamic CreateValue(Type configType, object value, IParser parser)
         {
-            var key = KeyNameResolver.GetKeyName(configType, _configurationOptions);
+            var settingType = configType.GetConfigurationSettingType();
 
-            // Read complex value from configuration
-            var value = _configuration.ReadComplexType(configType, key);
-            return value;
+            switch (settingType)
+            {
+                case ConfigurationSettingType.ValueType:
+                    dynamic config = Activator.CreateInstance(configType);
+                    config.SetValue(value, parser);
+                    return config;
+                case ConfigurationSettingType.ComplexType:
+                    value = parser == null ? value : parser.Parse(configType, value);
+                    return value;
+                case ConfigurationSettingType.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return null;
         }
     }
 }

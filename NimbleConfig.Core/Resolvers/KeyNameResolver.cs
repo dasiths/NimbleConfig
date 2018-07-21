@@ -7,14 +7,14 @@ namespace NimbleConfig.Core.Resolvers
 {
     internal static class KeyNameResolver
     {
-        public static string GetKeyName(Type type, ConfigurationOptions configurationOptions)
+        public static string ResolveKeyName(Type type, ConfigurationOptions configurationOptions)
         {
             var prefix = string.Empty;
 
             // Try to get prefix
             if (configurationOptions.KeyPrefixResolver != null)
             {
-                prefix = configurationOptions.KeyPrefixResolver();
+                prefix = configurationOptions.KeyPrefixResolver(type);
             }
 
             // Try to get resolve custom name

@@ -21,7 +21,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             var settingTypes = GetConfigurationSettings(assemblies);
             var complexSettingTypes = GetComplexConfigurationSettings(assemblies);
 
-            foreach (var settingType in settingTypes)
+            foreach (var settingType in settingTypes.Union(complexSettingTypes))
             {
                 services.AddSingleton(settingType, (s) =>
                         {
@@ -29,16 +29,6 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
                             return factory.CreateConfigurationSetting(settingType);
 
                         });
-            }
-
-            foreach (var settingType in complexSettingTypes)
-            {
-                services.AddSingleton(settingType, (s) =>
-                {
-                    var factory = s.GetService<ValueFactory>();
-                    return factory.CreateComplexConfigurationSetting(settingType);
-
-                });
             }
         }
 
