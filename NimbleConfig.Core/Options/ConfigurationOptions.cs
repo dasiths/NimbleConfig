@@ -1,4 +1,5 @@
 ﻿using System;
+using NimbleConfig.Core.ConfigurationReaders;
 using NimbleConfig.Core.Parsers;
 
 namespace NimbleConfig.Core.Options
@@ -22,5 +23,11 @@ namespace NimbleConfig.Core.Options
         /// Signature: [IParseer]Parser ParserResolver([Type] settingType)
         /// </summary>
         public Func<Type, IParser> ParserResolver { get; set; }
+
+        /// <summary>
+        /// Returns the IConfigurationReader for a given Type. Returns null if can not resolve.
+        /// Signature: [IConfigurationReader]Reader ReaderResolver([Type] settingType)
+        /// </summary>
+        public Func<Type, IConfigurationReader> ReaderResolver { get; set; }
     }
 }

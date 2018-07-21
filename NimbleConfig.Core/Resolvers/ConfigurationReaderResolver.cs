@@ -17,6 +17,15 @@ namespace NimbleConfig.Core.Resolvers
         public static IConfigurationReader ResolveReader(Type type,
             ConfigurationOptions configurationOptions)
         {
+
+            var resolver = configurationOptions.ReaderResolver;
+
+            // Try to resolve a custom reader defined in options
+            if (resolver != null)
+            {
+                return resolver.Invoke(type);
+            }
+
             if (type.GetConfigurationSettingType() == ConfigurationSettingType.ValueType)
             {
                 return ValueTypeConfigurationReader;
