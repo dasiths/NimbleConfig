@@ -1,14 +1,14 @@
-﻿using NimbleConfig.Core.Configuration;
-using NimbleConfig.Core.Parsers;
+﻿using System;
+using NimbleConfig.Core.Configuration;
 
 namespace NimbleConfig.Sample.Settings
 {
     public class VeryStrangeSetting:ConfigurationSetting<int>
     {
-        public override void SetValue(object configValue, IParser parser)
+        public override void SetValue(object rawConfigValue, Func<object, object> valueParserFunc)
         {
-            var useDefaultValue = configValue.ToString() == "default";
-            var number = useDefaultValue ? 100 : (int)parser.Parse(typeof(int), configValue);
+            var useDefaultValue = rawConfigValue.ToString() == "default";
+            var number = useDefaultValue ? 100 : (int)valueParserFunc(rawConfigValue);
 
             Value = number;
         }

@@ -37,24 +37,21 @@ namespace NimbleConfig.Core.Factory
             var parser = ParserResolver.ResolveParser(configType, _configurationOptions);
 
             // Set the value
-            var configSetting = CreateValue(configType, value, parser);
+            var configSetting = ConstructConfigurationValue(configType, value, parser);
             return configSetting;
 
         }
 
-        public dynamic CreateValue(Type configType, object value, IParser parser)
+        public dynamic ConstructConfigurationValue(Type configType, object value, IParser parser)
         {
             var settingType = configType.GetConfigurationSettingType();
 
             switch (settingType)
             {
                 case ConfigurationSettingType.ValueType:
-                    dynamic config = Activator.CreateInstance(configType);
-                    config.SetValue(value, parser);
-                    return config;
+                    return CreateValueType(configType, value, parser);
                 case ConfigurationSettingType.ComplexType:
-                    value = parser == null ? value : parser.Parse(configType, value);
-                    return value;
+                    return CreateComplexType(configType, value, parser);
                 case ConfigurationSettingType.None:
                     break;
                 default:
@@ -62,6 +59,21 @@ namespace NimbleConfig.Core.Factory
             }
 
             return null;
+        }
+
+        private static dynamic CreateComplexType(Type configType, object value, IParser parser)
+        {
+            value = parser == null ? value : parser.Parse(configType, value);
+            return value;
+        }
+
+        private static dynamic CreateValueType(Type configType, object value, IParser parser)
+        {
+            dynamic config = Activator.CreateInstance(configType);
+            var genericType = configType.GetGenericTypeOfConfigurationSetting();
+            object ParserFunc(object rawValue) => parser.Parse(genericType, rawValue);
+            config.SetValue(value, (Func<object, object>) ParserFunc);
+            return config;
         }
     }
 }
