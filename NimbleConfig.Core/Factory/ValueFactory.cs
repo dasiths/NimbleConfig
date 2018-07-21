@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using NimbleConfig.Core.Attributes;
 using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Options;
+using NimbleConfig.Core.Parsers;
+using NimbleConfig.Core.Resolvers;
 
 namespace NimbleConfig.Core.Factory
 {
@@ -24,21 +26,29 @@ namespace NimbleConfig.Core.Factory
             // Todo: handle missing config settings
 
             dynamic config = Activator.CreateInstance(configType);
-
             var key = KeyNameResolver.GetKeyName(configType, _configurationOptions);
-            object value = null;
 
+            // Get the configuration type
             var genericType = configType.GetGenericTypeOfConfigurationSetting();
 
-            value = genericType.IsValueType ? _configuration.ReadValueType(key) : _configuration.ReadComplexType(genericType, key);
+            // Read configuration value
+            var value = genericType.IsValueType ? 
+                _configuration.ReadValueType(key) : 
+                _configuration.ReadComplexType(genericType, key);
 
-            config.SetValue(value);
+            // Pick parser
+            var parser = ParserResolver.GetParser(genericType, _configurationOptions);
+            
+            // Set the value
+            config.SetValue(value, parser);
             return config;
         }
 
         public dynamic CreateComplexConfigurationSetting(Type configType)
         {
             var key = KeyNameResolver.GetKeyName(configType, _configurationOptions);
+
+            // Read complex value from configuration
             var value = _configuration.ReadComplexType(configType, key);
             return value;
         }

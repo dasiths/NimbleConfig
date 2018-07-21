@@ -7,9 +7,8 @@ namespace NimbleConfig.Core.Configuration
     {
         public virtual TValue Value { get; protected set; }
 
-        public virtual void SetValue(object configValue)
+        public virtual void SetValue(object configValue, IParser parser)
         {
-            var parser = ParserPicker.GetParser(typeof(TValue));
             Value = (TValue)parser.Parse(typeof(TValue), configValue);
         }
     }

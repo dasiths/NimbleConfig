@@ -3,7 +3,7 @@ using System.Linq;
 using NimbleConfig.Core.Attributes;
 using NimbleConfig.Core.Options;
 
-namespace NimbleConfig.Core.Factory
+namespace NimbleConfig.Core.Resolvers
 {
     internal static class KeyNameResolver
     {
