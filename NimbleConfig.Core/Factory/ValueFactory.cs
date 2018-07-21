@@ -3,15 +3,20 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using NimbleConfig.Core.Attributes;
 using NimbleConfig.Core.Extensions;
+using NimbleConfig.Core.Options;
 
 namespace NimbleConfig.Core.Factory
 {
     public class ValueFactory
     {
         private readonly IConfiguration _configuration;
-        public ValueFactory(IConfiguration configuration)
+        private readonly ConfigurationOptions _configurationOptions;
+
+        public ValueFactory(IConfiguration configuration,
+            ConfigurationOptions configurationOptions)
         {
             _configuration = configuration;
+            _configurationOptions = configurationOptions;
         }
 
         public dynamic CreateConfigurationSetting(Type configType)
@@ -20,7 +25,7 @@ namespace NimbleConfig.Core.Factory
 
             dynamic config = Activator.CreateInstance(configType);
 
-            var key = GetKeyName(configType);
+            var key = KeyNameResolver.GetKeyName(configType, _configurationOptions);
             object value = null;
 
             var genericType = configType.GetGenericTypeOfConfigurationSetting();
@@ -33,22 +38,9 @@ namespace NimbleConfig.Core.Factory
 
         public dynamic CreateComplexConfigurationSetting(Type configType)
         {
-            var key = GetKeyName(configType);
+            var key = KeyNameResolver.GetKeyName(configType, _configurationOptions);
             var value = _configuration.ReadComplexType(configType, key);
             return value;
-        }
-
-        private string GetKeyName(Type type)
-        {
-            var attribute = type.CustomAttributes.SingleOrDefault(c => c.AttributeType == typeof(SettingInfo));
-
-            if (attribute?.NamedArguments != null)
-            {
-                var keyName = attribute.NamedArguments.SingleOrDefault(a => a.MemberName == nameof(SettingInfo.Key));
-                return keyName.TypedValue.Value.ToString();
-            }
-
-            return type.Name;
         }
     }
 }

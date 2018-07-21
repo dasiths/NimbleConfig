@@ -5,15 +5,19 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using NimbleConfig.Core.Factory;
 using NimbleConfig.Core.Configuration;
+using NimbleConfig.Core.Options;
 
 namespace NimbleConfig.DependencyInjection.Aspnetcore
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddConfigurationSettingsFrom(this IServiceCollection services, Assembly[] assemblies)
+        public static void AddConfigurationSettingsFrom(this IServiceCollection services, Assembly[] assemblies, ConfigurationOptions configurationOptions = null)
         {
-            services.AddSingleton<ValueFactory>();
+            configurationOptions = configurationOptions ?? new ConfigurationOptions();
 
+            services.AddSingleton((s) => configurationOptions);
+            services.AddSingleton<ValueFactory>();
+            
             var settingTypes = GetConfigurationSettings(assemblies);
             var complexSettingTypes = GetComplexConfigurationSettings(assemblies);
 

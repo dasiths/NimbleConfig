@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NimbleConfig.Core.Parsers
 {
-    internal interface IParser
+    public interface IParser
     {
         object Parse(Type toType, object value);
     }
