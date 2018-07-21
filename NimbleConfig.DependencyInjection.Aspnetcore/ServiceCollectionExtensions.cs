@@ -5,6 +5,7 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using NimbleConfig.Core.Factory;
 using NimbleConfig.Core.Configuration;
+using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Options;
 
 namespace NimbleConfig.DependencyInjection.Aspnetcore
@@ -17,11 +18,10 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
 
             services.AddSingleton((s) => configurationOptions);
             services.AddSingleton<ValueFactory>();
-            
-            var settingTypes = GetConfigurationSettings(assemblies);
-            var complexSettingTypes = GetComplexConfigurationSettings(assemblies);
 
-            foreach (var settingType in settingTypes.Union(complexSettingTypes))
+            var settingTypes = GetConfigurationSettings(assemblies);
+
+            foreach (var settingType in settingTypes)
             {
                 services.AddSingleton(settingType, (s) =>
                         {
@@ -34,19 +34,12 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
 
         public static IEnumerable<Type> GetConfigurationSettings(Assembly[] assemblies)
         {
-            var serviceType = typeof(ConfigurationSetting<>);
             return assemblies.SelectMany(assembly => assembly.GetTypes())
-                .Where(type => type.BaseType != null &&
-                               type.BaseType.IsGenericType &&
-                               type.BaseType.GetGenericTypeDefinition() == serviceType &&
-                               !type.GetTypeInfo().IsAbstract);
-        }
-
-        public static IEnumerable<Type> GetComplexConfigurationSettings(Assembly[] assemblies)
-        {
-            var serviceType = typeof(IComplexConfigurationSetting);
-            return assemblies.SelectMany(assembly => assembly.GetTypes())
-                .Where(type => serviceType.IsAssignableFrom(type));
+                .Where(type =>
+                {
+                    var settingType = type.GetConfigurationSettingType();
+                    return settingType != ConfigurationSettingType.None;
+                });
         }
     }
 }
