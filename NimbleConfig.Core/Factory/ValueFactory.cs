@@ -46,8 +46,8 @@ namespace NimbleConfig.Core.Factory
 
             switch (settingType)
             {
-                case ConfigurationSettingType.GenericValueType:
-                    return CreateValueType(configType, value, parser);
+                case ConfigurationSettingType.GenericType:
+                    return CreateGenericType(configType, value, parser);
                 case ConfigurationSettingType.ComplexType:
                     return CreateComplexType(configType, value, parser);
                 case ConfigurationSettingType.None:
@@ -65,7 +65,7 @@ namespace NimbleConfig.Core.Factory
             return value;
         }
 
-        private static dynamic CreateValueType(Type configType, object value, IParser parser)
+        private static dynamic CreateGenericType(Type configType, object value, IParser parser)
         {
             dynamic config = Activator.CreateInstance(configType);
             var genericType = configType.GetGenericTypeOfConfigurationSetting();

@@ -8,7 +8,7 @@ namespace NimbleConfig.Core.Resolvers
 {
     internal static class ParserResolver
     {
-        private static readonly GenericParser GenericParser = new GenericParser();
+        private static readonly DefaultParser DefaultParser = new DefaultParser();
         private static readonly EnumParser EnumParser = new EnumParser();
 
         internal static IParser ResolveParser(Type configType, ConfigurationOptions configurationOptions)
@@ -24,7 +24,7 @@ namespace NimbleConfig.Core.Resolvers
                 case ConfigurationSettingType.ComplexType:
                     valueType = configType;
                     break;
-                case ConfigurationSettingType.GenericValueType:
+                case ConfigurationSettingType.GenericType:
                     valueType = configType.GetGenericTypeOfConfigurationSetting();
                     break;
                 case ConfigurationSettingType.None:
@@ -47,7 +47,7 @@ namespace NimbleConfig.Core.Resolvers
                 return EnumParser;
             }
 
-            return GenericParser;
+            return DefaultParser;
         }
     }
 }

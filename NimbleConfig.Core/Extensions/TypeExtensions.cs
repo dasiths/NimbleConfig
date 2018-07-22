@@ -12,9 +12,9 @@ namespace NimbleConfig.Core.Extensions
                 return ConfigurationSettingType.ComplexType;
             }
 
-            if (IsGenericValueTypeConfigurationSetting(configType))
+            if (IsGenericTypeConfigurationSetting(configType))
             {
-                return ConfigurationSettingType.GenericValueType;
+                return ConfigurationSettingType.GenericType;
             }
 
             return ConfigurationSettingType.None;
@@ -25,7 +25,7 @@ namespace NimbleConfig.Core.Extensions
             return typeof(IComplexConfigurationSetting).IsAssignableFrom(configType);
         }
 
-        public static bool IsGenericValueTypeConfigurationSetting(this Type configType)
+        public static bool IsGenericTypeConfigurationSetting(this Type configType)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace NimbleConfig.Core.Extensions
         {
             // Todo: better inspection and guards
 
-            if (IsGenericValueTypeConfigurationSetting(configType))
+            if (IsGenericTypeConfigurationSetting(configType))
             {
                 var baseType = GetImmidiateTypeAfterObject(configType);
                 return baseType.GetGenericArguments()[0];

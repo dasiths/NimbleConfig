@@ -30,7 +30,7 @@ namespace NimbleConfig.Core.Resolvers
                 return reader;
             }
 
-            if (type.GetConfigurationSettingType() == ConfigurationSettingType.GenericValueType)
+            if (type.GetConfigurationSettingType() == ConfigurationSettingType.GenericType)
             {
                 var genericType = type.GetGenericTypeOfConfigurationSetting();
 
