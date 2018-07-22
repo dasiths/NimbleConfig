@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Extensions.Configuration;
-using NimbleConfig.Core.Attributes;
 using NimbleConfig.Core.Configuration;
 using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Options;

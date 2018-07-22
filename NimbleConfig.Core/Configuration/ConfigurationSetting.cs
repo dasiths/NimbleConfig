@@ -1,5 +1,4 @@
 ﻿using System;
-using NimbleConfig.Core.Parsers;
 
 namespace NimbleConfig.Core.Configuration
 {

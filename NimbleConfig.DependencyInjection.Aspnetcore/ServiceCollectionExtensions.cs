@@ -27,7 +27,6 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
                         {
                             var factory = s.GetService<ValueFactory>();
                             return factory.CreateConfigurationSetting(settingType);
-
                         });
             }
         }
