@@ -6,12 +6,12 @@ using NimbleConfig.Core.Parsers;
 
 namespace NimbleConfig.Core.Resolvers
 {
-    internal static class ParserResolver
+    public class ParserResolver: IResolver<IParser>
     {
         private static readonly DefaultParser DefaultParser = new DefaultParser();
         private static readonly EnumParser EnumParser = new EnumParser();
 
-        internal static IParser ResolveParser(Type configType, ConfigurationOptions configurationOptions)
+        public IParser Resolve(Type configType, ConfigurationOptions configurationOptions)
         {
             // Todo: Add guards
 

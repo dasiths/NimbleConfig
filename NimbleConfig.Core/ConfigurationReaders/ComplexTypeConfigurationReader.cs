@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace NimbleConfig.Core.ConfigurationReaders
 {
-    internal class ComplexTypeConfigurationReader : IConfigurationReader
+    public class ComplexTypeConfigurationReader : IConfigurationReader
     {
         public object Read(IConfiguration configuration, Type complexType, string key)
         {

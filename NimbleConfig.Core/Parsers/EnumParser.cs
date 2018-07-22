@@ -2,7 +2,7 @@
 
 namespace NimbleConfig.Core.Parsers
 {
-    internal class EnumParser: IParser
+    public class EnumParser: IParser
     {
         object IParser.Parse(Type toType, object value)
         {

@@ -5,8 +5,12 @@ using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using NimbleConfig.Core.Factory;
 using NimbleConfig.Core.Configuration;
+using NimbleConfig.Core.ConfigurationReaders;
 using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Options;
+using NimbleConfig.Core.Parsers;
+using NimbleConfig.Core.Resolvers;
+using NimbleConfig.Core.ValueConstructors;
 
 namespace NimbleConfig.DependencyInjection.Aspnetcore
 {
@@ -14,10 +18,18 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
     {
         public static void AddConfigurationSettingsFrom(this IServiceCollection services, Assembly[] assemblies, ConfigurationOptions configurationOptions = null)
         {
+            // Add configuration options instance
             configurationOptions = configurationOptions ?? new ConfigurationOptions();
-
             services.AddSingleton((s) => configurationOptions);
-            services.AddSingleton<ValueFactory>();
+
+            // Add required resolvers
+            services.AddSingleton<IResolver<IKeyName>,KeyNameResolver>();
+            services.AddSingleton<IResolver<IParser>, ParserResolver>();
+            services.AddSingleton<IResolver<IConfigurationReader>, ConfigurationReaderResolver>();
+            services.AddSingleton<IResolver<IValueConstructor>, ValueConstructorResolver>();
+
+            // Add configuration factory
+            services.AddSingleton<ConfigurationFactory>();
 
             var settingTypes = GetConfigurationSettings(assemblies);
 
@@ -25,7 +37,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             {
                 services.AddSingleton(settingType, (s) =>
                         {
-                            var factory = s.GetService<ValueFactory>();
+                            var factory = s.GetService<ConfigurationFactory>();
                             return factory.CreateConfigurationSetting(settingType);
                         });
             }

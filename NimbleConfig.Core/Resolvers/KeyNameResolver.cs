@@ -1,13 +1,14 @@
 using System;
 using System.Linq;
 using NimbleConfig.Core.Attributes;
+using NimbleConfig.Core.Configuration;
 using NimbleConfig.Core.Options;
 
 namespace NimbleConfig.Core.Resolvers
 {
-    internal static class KeyNameResolver
+    public class KeyNameResolver: IResolver<IKeyName>
     {
-        public static string ResolveKeyName(Type type, ConfigurationOptions configurationOptions)
+        public IKeyName Resolve(Type type, ConfigurationOptions configurationOptions)
         {
             var prefix = string.Empty;
 
@@ -24,7 +25,7 @@ namespace NimbleConfig.Core.Resolvers
 
                 if (!string.IsNullOrWhiteSpace(customKeyName))
                 {
-                    return customKeyName;
+                    return new KeyName(string.Empty, customKeyName);
                 }
             }
 
@@ -34,11 +35,12 @@ namespace NimbleConfig.Core.Resolvers
             if (attribute?.NamedArguments != null)
             {
                 var keyName = attribute.NamedArguments.SingleOrDefault(a => a.MemberName == nameof(SettingInfo.Key));
-                return $"{prefix}{keyName.TypedValue.Value}";
+                var value = keyName.TypedValue.Value;
+                return new KeyName(prefix, value.ToString());
             }
 
             // Revert to type name
-            return $"{prefix}{type.Name}";
+            return new KeyName(prefix, type.Name);
         }
     }
 }

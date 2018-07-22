@@ -5,7 +5,7 @@ using NimbleConfig.Core.Extensions;
 
 namespace NimbleConfig.Core.ConfigurationReaders
 {
-    internal class GenericNonValueTypeConfigurationReader: IConfigurationReader
+    public class GenericNonValueTypeConfigurationReader: IConfigurationReader
     {
         public object Read(IConfiguration configuration, Type configType, string key)
         {

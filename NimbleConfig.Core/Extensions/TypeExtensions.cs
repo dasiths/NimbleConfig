@@ -20,7 +20,7 @@ namespace NimbleConfig.Core.Extensions
             return ConfigurationSettingType.None;
         }
 
-        public static bool IsComplexTypeConfigurationSetting(Type configType)
+        public static bool IsComplexTypeConfigurationSetting(this Type configType)
         {
             return typeof(IComplexConfigurationSetting).IsAssignableFrom(configType);
         }

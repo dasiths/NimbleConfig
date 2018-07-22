@@ -2,7 +2,7 @@
 
 namespace NimbleConfig.Core.Parsers
 {
-    internal class DefaultParser : IParser
+    public class DefaultParser : IParser
     {
         object IParser.Parse(Type toType, object value)
         {

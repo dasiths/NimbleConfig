@@ -6,7 +6,7 @@ using NimbleConfig.Core.Options;
 
 namespace NimbleConfig.Core.Resolvers
 {
-    public static class ConfigurationReaderResolver
+    public class ConfigurationReaderResolver: IResolver<IConfigurationReader>
     {
         private static readonly IConfigurationReader GenericValueTypeConfigurationReader =
             new GenericValueTypeConfigurationReader();
@@ -17,8 +17,7 @@ namespace NimbleConfig.Core.Resolvers
         private static readonly IConfigurationReader ComplexTypeConfigurationReader =
             new ComplexTypeConfigurationReader();
 
-        public static IConfigurationReader ResolveReader(Type type,
-            ConfigurationOptions configurationOptions)
+        public IConfigurationReader Resolve(Type type, ConfigurationOptions configurationOptions)
         {
             var resolver = configurationOptions.ReaderResolver;
 

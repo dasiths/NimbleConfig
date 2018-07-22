@@ -4,7 +4,7 @@ namespace NimbleConfig.Core.Configuration
 {
     public abstract class ConfigurationSetting<TValue>
     {
-        public virtual TValue Value { get; protected set; }
+        public virtual TValue Value { get; set; }
 
         /// <summary>
         /// This method gets called when setting the value, use this to customize the logic
