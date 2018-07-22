@@ -9,15 +9,14 @@ namespace NimbleConfig.Core.ConfigurationReaders
     {
         public object Read(IConfiguration configuration, Type configType, string key)
         {
-            // Handle Array Types
             var valueType = configType.GetGenericTypeOfConfigurationSetting();
             var elementType = valueType.GetElementType();
 
-            // Handle Is ArrayType
+            // Handle Complex Arrays
             if (valueType.IsArray && elementType != null && !elementType.IsValueType)
             {
                 return configuration.GetSection(key).GetChildren()
-                    .Select(config => config.Get(valueType.GetElementType()))
+                    .Select(config => config.Get(elementType))
                     .ToArray();
             }
 
