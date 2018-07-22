@@ -3,9 +3,15 @@
   
 ---
 
-### Using it is very easy ###
+### Getting Started ###
 
-1. Install Nuget `NimbleConfig.DependencyInjection.Aspnetcore` (Or download source from here and reference it)
+1. Install and reference the Nuget `NimbleConfig.DependencyInjection.Aspnetcore`
+
+In the NuGet Package Manager Console, type:
+
+```
+    Install-Package NimbleConfig.DependencyInjection.Aspnetcore
+```
 
 2. Define your settings class as follows
 ```C#
@@ -14,7 +20,7 @@
     {
     }
 ```
-3. Add it to your appsettings.json
+3. Add it to your `appsettings.json`
 ```C#
     {
         "SomeSetting": "SomeValue"
