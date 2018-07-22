@@ -3,7 +3,7 @@
     public enum ConfigurationSettingType
     {
         None = 0,
-        ValueType = 1,
-        ComplexType = 2
+        GenericValueType = 1,
+        ComplexType = 3
     }
 }

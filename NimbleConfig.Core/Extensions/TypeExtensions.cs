@@ -14,7 +14,7 @@ namespace NimbleConfig.Core.Extensions
 
             if (IsValueTypeConfigurationSetting(configType))
             {
-                return ConfigurationSettingType.ValueType;
+                return ConfigurationSettingType.GenericValueType;
             }
 
             return ConfigurationSettingType.None;

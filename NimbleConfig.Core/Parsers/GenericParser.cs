@@ -6,17 +6,34 @@ namespace NimbleConfig.Core.Parsers
     {
         object IParser.Parse(Type toType, object value)
         {
-            // Handle complex type arrays
-            if (toType.IsArray && !toType.GetElementType().IsValueType)
-            {
-                object[] values = (object[])value;
-                Array destinationArray = Array.CreateInstance(toType.GetElementType(), values.Length);
-                Array.Copy(values, destinationArray, values.Length);
+            var elementType = toType.GetElementType();
 
-                return destinationArray;
+            // Handle complex type arrays
+            if (toType.IsArray && elementType != null && !elementType.IsValueType)
+            {
+                return ParaseArray(value, elementType);
             }
 
-            return Convert.ChangeType(value, toType);
+            return ChangeType(value, toType);
+        }
+
+        private static object ParaseArray(object value, Type elementType)
+        {
+            var values = (object[]) value;
+            var destinationArray = Array.CreateInstance(elementType, values.Length);
+
+            for (var i = 0; i < values.Length; i++)
+            {
+                var convertedValue = ChangeType(values[i], elementType);
+                destinationArray.SetValue(convertedValue, i);
+            }
+
+            return destinationArray;
+        }
+
+        private static object ChangeType(object value, Type type)
+        {
+            return Convert.ChangeType(value, type);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace NimbleConfig.Core.Resolvers
                 case ConfigurationSettingType.ComplexType:
                     valueType = configType;
                     break;
-                case ConfigurationSettingType.ValueType:
+                case ConfigurationSettingType.GenericValueType:
                     valueType = configType.GetGenericTypeOfConfigurationSetting();
                     break;
                 case ConfigurationSettingType.None:
@@ -34,7 +34,8 @@ namespace NimbleConfig.Core.Resolvers
             }
 
             // Try to resolve a custom parser defined in options
-            var customParser = configurationOptions.ParserResolver?.Invoke(valueType);
+            var resolver = configurationOptions.ParserResolver;
+            var customParser = resolver?.Invoke(valueType);
 
             if (customParser != null)
             {

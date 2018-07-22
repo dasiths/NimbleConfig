@@ -53,7 +53,7 @@ namespace NimbleConfig.Sample.Controllers
                 _enumSetting.Value.ToString(),
                 _boolSetting.Value.ToString(),
                 _customKeySetting.Value.ToString("N"),
-                _complexArraySetting.Value.First().Key
+                string.Join("|", _complexArraySetting.Value.Select(v => v.Key))
             };
         }
     }

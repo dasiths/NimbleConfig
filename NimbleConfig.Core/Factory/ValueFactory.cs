@@ -48,7 +48,7 @@ namespace NimbleConfig.Core.Factory
 
             switch (settingType)
             {
-                case ConfigurationSettingType.ValueType:
+                case ConfigurationSettingType.GenericValueType:
                     return CreateValueType(configType, value, parser);
                 case ConfigurationSettingType.ComplexType:
                     return CreateComplexType(configType, value, parser);

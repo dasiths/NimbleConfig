@@ -8,28 +8,37 @@ namespace NimbleConfig.Core.Resolvers
 {
     public static class ConfigurationReaderResolver
     {
-        private static readonly ValueTypeConfigurationReader ValueTypeConfigurationReader =
-            new ValueTypeConfigurationReader();
+        private static readonly IConfigurationReader GenericValueTypeConfigurationReader =
+            new GenericValueTypeConfigurationReader();
 
-        private static readonly ComplexTypeConfigurationReader ComplexTypeConfigurationReader =
+        private static readonly IConfigurationReader GenericNonValueTypeConfigurationReader = 
+            new GenericNonValueTypeConfigurationReader();
+
+        private static readonly IConfigurationReader ComplexTypeConfigurationReader =
             new ComplexTypeConfigurationReader();
 
         public static IConfigurationReader ResolveReader(Type type,
             ConfigurationOptions configurationOptions)
         {
-
             var resolver = configurationOptions.ReaderResolver;
 
             // Try to resolve a custom reader defined in options
-            if (resolver != null)
+            var reader = resolver?.Invoke(type);
+
+            if (reader != null)
             {
-                return resolver.Invoke(type);
+                return reader;
             }
 
-            if (type.GetConfigurationSettingType() == ConfigurationSettingType.ValueType)
+            if (type.GetConfigurationSettingType() == ConfigurationSettingType.GenericValueType)
             {
-                return ValueTypeConfigurationReader;
-            } else
+                var genericType = type.GetGenericTypeOfConfigurationSetting();
+
+                return genericType.IsValueType
+                    ? GenericValueTypeConfigurationReader
+                    : GenericNonValueTypeConfigurationReader;
+            }
+            else
             {
                 return ComplexTypeConfigurationReader;
             }
