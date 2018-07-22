@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageProjectUrl>https://github.com/dasiths/NimbleConfig</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/dasiths/NimbleConfig</RepositoryUrl>
+    <Authors>Dasith Wijesiriwardena</Authors>
+    <Description>A simple, unambitious, convention-based configuration injector for AspNetCore using IConfiguration (Microsoft.Extensions.Configuration)</Description>
   </PropertyGroup>
 
   <ItemGroup>
