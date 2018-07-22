@@ -17,6 +17,7 @@ namespace NimbleConfig.Sample.Controllers
         private readonly EnumSetting _enumSetting;
         private readonly BoolSetting _boolSetting;
         private readonly CustomKeySetting _customKeySetting;
+        private readonly ComplexArraySetting _complexArraySetting;
 
         public ValuesController(SomeSetting someSetting,
             SomeNumberSetting someNumberSetting,
@@ -25,7 +26,8 @@ namespace NimbleConfig.Sample.Controllers
             ArraySetting arraySetting,
             EnumSetting enumSetting,
             BoolSetting boolSetting,
-            CustomKeySetting customKeySetting)
+            CustomKeySetting customKeySetting,
+            ComplexArraySetting complexArraySetting)
         {
             _someSetting = someSetting;
             _someNumberSetting = someNumberSetting;
@@ -35,6 +37,7 @@ namespace NimbleConfig.Sample.Controllers
             _enumSetting = enumSetting;
             _boolSetting = boolSetting;
             _customKeySetting = customKeySetting;
+            _complexArraySetting = complexArraySetting;
         }
         // GET api/values
         [HttpGet]
@@ -49,7 +52,8 @@ namespace NimbleConfig.Sample.Controllers
                 _arraySetting.Value.First().ToString(),
                 _enumSetting.Value.ToString(),
                 _boolSetting.Value.ToString(),
-                _customKeySetting.Value.ToString("N")
+                _customKeySetting.Value.ToString("N"),
+                _complexArraySetting.Value.First().Key
             };
         }
     }

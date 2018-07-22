@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 using NimbleConfig.Core.Extensions;
 
@@ -10,9 +11,21 @@ namespace NimbleConfig.Core.ConfigurationReaders
         {
             var valueType = configType.GetGenericTypeOfConfigurationSetting();
 
-            return valueType.IsArray ? 
-                configuration.GetSection(key).Get(valueType) : 
-                configuration[key];
+            if (valueType.IsValueType)
+            {
+                return configuration[key];
+            }
+            else
+            {
+                if (valueType.IsArray && valueType.HasElementType && !valueType.GetElementType().IsValueType)
+                {
+                    return configuration.GetSection(key).GetChildren()
+                        .Select(config => config.Get(valueType.GetElementType()))
+                        .ToArray();
+                }
+
+                return configuration.GetSection(key).Get(valueType);
+            } 
         }
     }
 }
