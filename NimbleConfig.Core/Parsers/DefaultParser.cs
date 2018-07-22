@@ -11,13 +11,13 @@ namespace NimbleConfig.Core.Parsers
             // Handle complex type arrays
             if (toType.IsArray && elementType != null && !elementType.IsValueType)
             {
-                return ParaseArray(value, elementType);
+                return ParseArray(value, elementType);
             }
 
             return ChangeType(value, toType);
         }
 
-        private static object ParaseArray(object value, Type elementType)
+        private static object ParseArray(object value, Type elementType)
         {
             var values = (object[]) value;
             var destinationArray = Array.CreateInstance(elementType, values.Length);
