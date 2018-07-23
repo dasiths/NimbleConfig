@@ -39,11 +39,10 @@ namespace NimbleConfig.Core.Factory
             // Todo: handle missing config settings
             
             // Resolve the key and prefix names
-            var key = _keyNameResolver.Resolve(configType, _configurationOptions);
+            var keyName = _keyNameResolver.Resolve(configType, _configurationOptions);
 
             // Read configuration value
             var reader = _configurationReaderResolver.Resolve(configType, _configurationOptions);
-            var value = reader.Read(_configuration, configType, key.GetValue);
 
             // Pick parser
             var parser = _parserResolver.Resolve(configType, _configurationOptions);
@@ -52,7 +51,7 @@ namespace NimbleConfig.Core.Factory
             var valueConstructor = _valueConstructorResolver.Resolve(configType, _configurationOptions);
 
             // Set the value
-            var configSetting = valueConstructor?.ConstructValue(configType, value, parser);
+            var configSetting = valueConstructor?.ConstructValue(_configuration, configType, keyName, reader, parser);
             return configSetting;
 
         }

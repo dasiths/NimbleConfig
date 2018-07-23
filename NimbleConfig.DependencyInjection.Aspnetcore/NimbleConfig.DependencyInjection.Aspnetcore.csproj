@@ -7,7 +7,10 @@
     <RepositoryUrl>https://github.com/dasiths/NimbleConfig</RepositoryUrl>
     <Authors>Dasith Wijesiriwardena</Authors>
     <Description>A simple, unambitious, convention-based configuration injector for AspNetCore using IConfiguration (Microsoft.Extensions.Configuration)</Description>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
+    <PackageLicenseUrl>https://github.com/dasiths/NimbleConfig/blob/master/LICENSE.md</PackageLicenseUrl>
+    <Copyright>https://github.com/dasiths/NimbleConfig/blob/master/LICENSE.md</Copyright>
+    <PackageTags>configuration, aspnetcore, injection</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

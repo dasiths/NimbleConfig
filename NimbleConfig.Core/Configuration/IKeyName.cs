@@ -2,6 +2,6 @@
 {
     public interface IKeyName
     {
-        string GetValue { get; }
+        string QualifiedKeyName { get; }
     }
 }

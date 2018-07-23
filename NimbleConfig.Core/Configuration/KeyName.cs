@@ -11,6 +11,6 @@
             Name = name;
         }
 
-        public string GetValue => $"{Prefix}{Name}";
+        public string QualifiedKeyName => $"{Prefix}{Name}";
     }
 }
