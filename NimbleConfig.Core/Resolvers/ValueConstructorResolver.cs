@@ -6,12 +6,22 @@ using NimbleConfig.Core.ValueConstructors;
 
 namespace NimbleConfig.Core.Resolvers
 {
-    public class ValueConstructorResolver: IResolver<IValueConstructor>
+    public class ValueConstructorResolver : IResolver<IValueConstructor>
     {
         private static readonly IValueConstructor ComplexTypeValueConstructor = new ComplexTypeValueConstructor();
         private static readonly IValueConstructor GenericTypeValueConstructor = new GenericTypeValueConstructor();
 
         public IValueConstructor Resolve(Type configType, ConfigurationOptions configurationOptions)
+        {
+            var autoResolvedConstructor = ResolveInternally(configType, configurationOptions);
+
+            // Try to resolve a custom constructor from options
+            var customParser = configurationOptions.CustomValueConstructor?.Invoke(configType, autoResolvedConstructor);
+
+            return customParser ?? autoResolvedConstructor;
+        }
+
+        public IValueConstructor ResolveInternally(Type configType, ConfigurationOptions configurationOptions)
         {
             var settingType = configType.GetConfigurationSettingType();
 

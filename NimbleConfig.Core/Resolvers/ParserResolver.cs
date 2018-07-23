@@ -13,10 +13,29 @@ namespace NimbleConfig.Core.Resolvers
 
         public IParser Resolve(Type configType, ConfigurationOptions configurationOptions)
         {
-            // Todo: Add guards
-
             // Get the configuration value type
-            Type valueType = typeof(object);
+            var valueType = GetConfigurationValueType(configType);
+            var autoResolvedParser = ResolveInternally(valueType, configurationOptions);
+
+            // Try to resolve a custom parser from options, use configType as this is what the function expects
+            var customParser = configurationOptions.CustomParser?.Invoke(configType, autoResolvedParser);
+
+            return customParser ?? autoResolvedParser;
+        }
+
+        public IParser ResolveInternally(Type valueType, ConfigurationOptions configurationOptions)
+        {
+            if (valueType.IsEnum)
+            {
+                return EnumParser;
+            }
+
+            return DefaultParser;
+        }
+
+        private static Type GetConfigurationValueType(Type configType)
+        {
+            var valueType = typeof(object);
             var settingType = configType.GetConfigurationSettingType();
 
             switch (settingType)
@@ -33,21 +52,7 @@ namespace NimbleConfig.Core.Resolvers
                     throw new ArgumentOutOfRangeException();
             }
 
-            // Try to resolve a custom parser defined in options
-            var resolver = configurationOptions.ParserResolver;
-            var customParser = resolver?.Invoke(valueType);
-
-            if (customParser != null)
-            {
-                return customParser;
-            }
-
-            if (valueType.IsEnum)
-            {
-                return EnumParser;
-            }
-
-            return DefaultParser;
+            return valueType;
         }
     }
 }

@@ -15,6 +15,11 @@ namespace NimbleConfig.Core.ValueConstructors
             IConfigurationReader reader,
             IParser parser)
         {
+            configuration.EnsureNotNull(nameof(configuration));
+            keyName.EnsureNotNull(nameof(keyName));
+            reader.EnsureNotNull(nameof(reader));
+            parser.EnsureNotNull(nameof(parser));
+
             dynamic config = Activator.CreateInstance(configType);
             var value = reader.Read(configuration, configType, keyName);
             var genericType = configType.GetGenericTypeOfConfigurationSetting();

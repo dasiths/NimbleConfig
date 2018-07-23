@@ -5,6 +5,16 @@ namespace NimbleConfig.Core.Extensions
 {
     public static class TypeExtensions
     {
+        public static T EnsureNotNull<T>(this T objectToCheck, string paramName)
+        {
+            if (objectToCheck != null)
+            {
+                return objectToCheck;
+            }
+
+            throw new ArgumentNullException(paramName);
+        }
+
         public static ConfigurationSettingType GetConfigurationSettingType(this Type configType)
         {
             if (IsComplexTypeConfigurationSetting(configType))
