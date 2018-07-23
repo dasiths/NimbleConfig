@@ -1,6 +1,7 @@
 ﻿using System;
 using NimbleConfig.Core.Configuration;
 using NimbleConfig.Core.ConfigurationReaders;
+using NimbleConfig.Core.Logging;
 using NimbleConfig.Core.Parsers;
 using NimbleConfig.Core.ValueConstructors;
 
