@@ -6,12 +6,12 @@ using NimbleConfig.Core.Options;
 
 namespace NimbleConfig.Core.Resolvers
 {
-    public class ConfigurationReaderResolver: IResolver<IConfigurationReader>
+    public class ConfigurationReaderResolver : IResolver<IConfigurationReader>
     {
         private static readonly IConfigurationReader GenericValueTypeConfigurationReader =
             new GenericValueTypeConfigurationReader();
 
-        private static readonly IConfigurationReader GenericNonValueTypeConfigurationReader = 
+        private static readonly IConfigurationReader GenericNonValueTypeConfigurationReader =
             new GenericNonValueTypeConfigurationReader();
 
         private static readonly IConfigurationReader ComplexTypeConfigurationReader =
@@ -19,16 +19,16 @@ namespace NimbleConfig.Core.Resolvers
 
         public IConfigurationReader Resolve(Type type, ConfigurationOptions configurationOptions)
         {
-            var resolver = configurationOptions.ReaderResolver;
+            var autoResolvedReader = ResolveInternally(type, configurationOptions);
 
-            // Try to resolve a custom reader defined in options
-            var reader = resolver?.Invoke(type);
+            // Try to resolve a custom reader from options
+            var reader = configurationOptions.CustomConfigurationReader?.Invoke(type, autoResolvedReader);
 
-            if (reader != null)
-            {
-                return reader;
-            }
+            return reader ?? autoResolvedReader;
+        }
 
+        public IConfigurationReader ResolveInternally(Type type, ConfigurationOptions configurationOptions)
+        {
             if (type.GetConfigurationSettingType() == ConfigurationSettingType.GenericType)
             {
                 var genericType = type.GetGenericTypeOfConfigurationSetting();

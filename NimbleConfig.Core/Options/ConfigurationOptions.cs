@@ -1,33 +1,47 @@
 ﻿using System;
+using NimbleConfig.Core.Configuration;
 using NimbleConfig.Core.ConfigurationReaders;
 using NimbleConfig.Core.Parsers;
+using NimbleConfig.Core.ValueConstructors;
 
 namespace NimbleConfig.Core.Options
 {
     public class ConfigurationOptions
     {
         /// <summary>
-        /// Returns the key prefix for a given Type. Returns string.empty if can not resolve.
-        /// Signature: [string]Prefix KeyPrefixResolver([Type] settingType)
+        /// Function that resolves a 'IKeyName' for a given type.
         /// </summary>
-        public Func<Type, string> KeyPrefixResolver { get; set; }
+        /// <param name="configurationSettingType">The type of configuration setting.</param>
+        /// <param name="autoResolvedKeyName">The IKeyName resolved by the library.</param>
+        /// <returns></returns>
+        public delegate IKeyName CustomKeyNameResolverDelegate(Type configurationSettingType, IKeyName autoResolvedKeyName);
+        public CustomKeyNameResolverDelegate CustomKeyName { get; set; }
 
         /// <summary>
-        /// Returns the key for a given Type. Returns string.empty if can not resolve.
-        /// Signature: [string]Key KeyResolver([Type] settingType, [string]resolvedKeyPrefix)
+        /// Function that resolves a 'IParser' for a given type.
         /// </summary>
-        public Func<Type, string, string> KeyResolver { get; set; }
+        /// <param name="configurationSettingType">The type of configuration setting.</param>
+        /// <param name="autoResolvedParser">The IParser resolved by the library.</param>
+        /// <returns></returns>
+        public delegate IParser CustomParserResolverDelegate(Type configurationSettingType, IParser autoResolvedParser);
+        public CustomParserResolverDelegate CustomParser { get; set; }
 
         /// <summary>
-        /// Returns the IParser for a given Type. Returns null if can not resolve.
-        /// Signature: [IParseer]Parser ParserResolver([Type] settingType)
+        /// Function that resolves a 'IConfigurationReader' for a given type.
         /// </summary>
-        public Func<Type, IParser> ParserResolver { get; set; }
+        /// <param name="configurationSettingType">The type of configuration setting.</param>
+        /// <param name="autoResolvedConfigurationReader">The IConfigurationReader resolved by the library.</param>
+        /// <returns></returns>
+        public delegate IConfigurationReader CustomConfigurationReaderDelegate(Type configurationSettingType, IConfigurationReader autoResolvedConfigurationReader);
+        public CustomConfigurationReaderDelegate CustomConfigurationReader { get; set; }
 
         /// <summary>
-        /// Returns the IConfigurationReader for a given Type. Returns null if can not resolve.
-        /// Signature: [IConfigurationReader]Reader ReaderResolver([Type] settingType)
+        /// Function that resolves a 'IValueConstructor' for a given type.
         /// </summary>
-        public Func<Type, IConfigurationReader> ReaderResolver { get; set; }
+        /// <param name="configurationSettingType">The type of configuration setting.</param>
+        /// <param name="autoResolvedValueConstructor">The IValueConstructor resolved by the library.</param>
+        /// <returns></returns>
+        public delegate IValueConstructor CustomValueConstructorDelegate(Type configurationSettingType, IValueConstructor autoResolvedValueConstructor);
+        public CustomValueConstructorDelegate CustomValueConstructor { get; set; }
     }
 }

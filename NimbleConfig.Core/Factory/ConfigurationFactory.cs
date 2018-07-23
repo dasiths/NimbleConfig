@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using NimbleConfig.Core.Configuration;
 using NimbleConfig.Core.ConfigurationReaders;
+using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Options;
 using NimbleConfig.Core.Parsers;
 using NimbleConfig.Core.Resolvers;
@@ -26,12 +27,18 @@ namespace NimbleConfig.Core.Factory
             IResolver<IParser> parserResolver, 
             IResolver<IValueConstructor> valueConstructorResolver)
         {
-            _configuration = configuration;
-            _configurationOptions = configurationOptions;
-            _keyNameResolver = keyNameResolver;
-            _configurationReaderResolver = configurationReaderResolver;
-            _parserResolver = parserResolver;
-            _valueConstructorResolver = valueConstructorResolver;
+            _configuration = configuration
+                .EnsureNotNull(nameof(configuration));
+            _configurationOptions = configurationOptions
+                .EnsureNotNull(nameof(configurationOptions));
+            _keyNameResolver = keyNameResolver
+                .EnsureNotNull(nameof(keyNameResolver));
+            _configurationReaderResolver = configurationReaderResolver
+                .EnsureNotNull(nameof(configurationReaderResolver));
+            _parserResolver = parserResolver
+                .EnsureNotNull(nameof(parserResolver));
+            _valueConstructorResolver = valueConstructorResolver
+                .EnsureNotNull(nameof(valueConstructorResolver));
         }
 
         public dynamic CreateConfigurationSetting(Type configType)

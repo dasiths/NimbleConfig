@@ -10,24 +10,17 @@ namespace NimbleConfig.Core.Resolvers
     {
         public IKeyName Resolve(Type type, ConfigurationOptions configurationOptions)
         {
+            var autoResolvedKeyName = ResolveInternally(type, configurationOptions);
+            
+            // Try to resolve a custom key name from options
+            var customKeyName = configurationOptions.CustomKeyName?.Invoke(type, autoResolvedKeyName);
+
+            return customKeyName ?? autoResolvedKeyName;
+        }
+
+        private IKeyName ResolveInternally(Type type, ConfigurationOptions configurationOptions)
+        {
             var prefix = string.Empty;
-
-            // Try to get prefix
-            if (configurationOptions.KeyPrefixResolver != null)
-            {
-                prefix = configurationOptions.KeyPrefixResolver(type);
-            }
-
-            // Try to get resolve custom name
-            if (configurationOptions.KeyResolver != null)
-            {
-                var customKeyName = configurationOptions.KeyResolver(type, prefix);
-
-                if (!string.IsNullOrWhiteSpace(customKeyName))
-                {
-                    return new KeyName(string.Empty, customKeyName);
-                }
-            }
 
             // Try to resolve via SettingInfo attribute
             var attribute = type.CustomAttributes.SingleOrDefault(c => c.AttributeType == typeof(SettingInfo));
