@@ -1,6 +1,6 @@
 ﻿using NimbleConfig.Core.Configuration;
 
-namespace NimbleConfig.Sample.Settings
+namespace NimbleConfig.Samples.Aspnetcore.Settings
 {
     public class BoolSetting: ConfigurationSetting<bool>
     {

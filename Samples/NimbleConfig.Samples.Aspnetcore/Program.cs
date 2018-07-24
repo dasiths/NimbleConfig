@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace NimbleConfig.Sample
+namespace NimbleConfig.Samples.Aspnetcore
 {
     public class Program
     {
