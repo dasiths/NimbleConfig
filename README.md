@@ -1,10 +1,10 @@
-## NimbleConfig [![Build status](https://ci.appveyor.com/api/projects/status/4wbdssddl5qxukk7?svg=true)](https://ci.appveyor.com/project/dasiths/nimbleconfig) [![NuGet](https://img.shields.io/nuget/v/NimbleConfig.DependencyInjection.Aspnetcore.svg)](https://www.nuget.org/packages/NimbleConfig.DependencyInjection.Aspnetcore)
+# NimbleConfig [![Build status](https://ci.appveyor.com/api/projects/status/4wbdssddl5qxukk7?svg=true)](https://ci.appveyor.com/project/dasiths/nimbleconfig) [![NuGet](https://img.shields.io/nuget/v/NimbleConfig.DependencyInjection.Aspnetcore.svg)](https://www.nuget.org/packages/NimbleConfig.DependencyInjection.Aspnetcore)
 
-### A simple, unambitious, convention-based configuration injector for .net with support for AspNetCore using IConfiguration (`Microsoft.Extensions.Configuration`)
+### A simple, unambitious, convention-based configuration injector for .net standard using IConfiguration (`Microsoft.Extensions.Configuration`) with full support for AspNetCore.
   
 ---
 
-### Getting Started ###
+## Getting Started
 
 1. Install and reference the Nuget `NimbleConfig.DependencyInjection.Aspnetcore`
 
@@ -59,7 +59,11 @@ In the NuGet Package Manager Console, type:
     }
 ```
 
-See the sample project more advanced use cases like custom naming, complex types and arrays.
+## Want more?
+
+#### See the sample projects for more advanced use cases like complex types, enums and arrays. Checkout the `ConsoleApp` example on how to use it in a non aspnetcore app. 
+
+#### NimbleConfig provides full customisation of resolving the name (`IKeyName`), reader (`IConfigurationReader`), parser (`IParser`), constructor (`IValueConstructor`) for your setting. It also allows hooks in to the setting creation life cycle via the `ConfigurationOptions`.
 
 ---
 
