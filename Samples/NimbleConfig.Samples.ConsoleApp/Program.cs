@@ -10,7 +10,6 @@ namespace NimbleConfig.Samples.ConsoleApp
     {
         static void Main(string[] args)
         {
-
             // Construct the IConfiguration
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -19,6 +18,9 @@ namespace NimbleConfig.Samples.ConsoleApp
             var configuration = (IConfiguration)builder.Build();
 
             // Configure your DI Container
+            // We are using 'Microsoft.Extensions.DependencyInjection' in this example
+            // but you can use your favourite one like Autofac, StructureMap, Ninject etc
+
             var collection = new ServiceCollection();
             collection.AddSingleton(configuration);
             collection.AddConfigurationSettingsFrom(new[] { Assembly.GetExecutingAssembly() });
