@@ -1,4 +1,4 @@
-﻿namespace NimbleConfig.Sample.Settings
+﻿namespace NimbleConfig.Samples.Aspnetcore.Settings
 {
     public enum SomeEnum
     {

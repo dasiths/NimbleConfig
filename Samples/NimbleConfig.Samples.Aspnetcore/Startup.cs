@@ -4,12 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using NimbleConfig.Core.Logging;
-using NimbleConfig.Core.Options;
 using NimbleConfig.DependencyInjection.Aspnetcore;
 
-namespace NimbleConfig.Sample
+namespace NimbleConfig.Samples.Aspnetcore
 {
     public class Startup
     {

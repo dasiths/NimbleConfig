@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NimbleConfig.Sample.Settings;
+using NimbleConfig.Samples.Aspnetcore.Settings;
 
-namespace NimbleConfig.Sample.Controllers
+namespace NimbleConfig.Samples.Aspnetcore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

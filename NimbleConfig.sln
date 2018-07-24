@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NimbleConfig.Sample", "NimbleConfig.Sample\NimbleConfig.Sample.csproj", "{1F98D70D-D247-415E-B0AC-5B2A03D19F3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NimbleConfig.Samples.Aspnetcore", "Samples\NimbleConfig.Samples.Aspnetcore\NimbleConfig.Samples.Aspnetcore.csproj", "{1F98D70D-D247-415E-B0AC-5B2A03D19F3D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NimbleConfig.Core", "NimbleConfig.Core\NimbleConfig.Core.csproj", "{05DBD7A8-93C6-4CEE-9CE0-4A591F3699A5}"
 EndProject

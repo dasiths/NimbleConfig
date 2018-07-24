@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NimbleConfig.Core.Logging;
 
-namespace NimbleConfig.Sample
+namespace NimbleConfig.Samples.Aspnetcore
 {
     public class CustomConfigConfigLogger: IConfigLogger
     {
