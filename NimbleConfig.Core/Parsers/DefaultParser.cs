@@ -6,6 +6,11 @@ namespace NimbleConfig.Core.Parsers
     {
         object IParser.Parse(Type toType, object value)
         {
+            if (value == null)
+            {
+                return null;
+            }
+
             var elementType = toType.GetElementType();
 
             // Handle complex type arrays
