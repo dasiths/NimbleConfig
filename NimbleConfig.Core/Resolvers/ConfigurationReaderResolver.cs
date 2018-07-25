@@ -22,9 +22,9 @@ namespace NimbleConfig.Core.Resolvers
             var autoResolvedReader = ResolveInternally(type, configurationOptions);
 
             // Try to resolve a custom reader from options
-            var reader = configurationOptions.CustomConfigurationReader?.Invoke(type, autoResolvedReader);
+            var customReader = configurationOptions.CustomConfigurationReader?.Invoke(type, autoResolvedReader);
 
-            return reader ?? autoResolvedReader;
+            return customReader ?? autoResolvedReader;
         }
 
         public IConfigurationReader ResolveInternally(Type type, ConfigurationOptions configurationOptions)
