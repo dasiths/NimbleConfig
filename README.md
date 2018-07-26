@@ -53,9 +53,8 @@ In the NuGet Package Manager Console, type:
     public void ConfigureServices(IServiceCollection services)
     {
         // Other services go here
-		
-        var assemblies = new[] {typeof(Startup).Assembly}; // assemblies to scan for settings
-        services.AddConfigurationSettingsFrom(assemblies); // Wire it up
+
+        services.AddConfigurationSettings(); // Wire it up
     }
 ```
 

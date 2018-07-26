@@ -16,30 +16,58 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddConfigurationSettingsFrom(this IServiceCollection services, Assembly[] assemblies, ConfigurationOptions configurationOptions = null)
+        public static void AddConfigurationSettings(this IServiceCollection services,
+            ConfigurationOptions configurationOptions = null,
+            ServiceLifetime settingLifetime = ServiceLifetime.Singleton)
         {
-            // Add configuration options instance
-            configurationOptions = configurationOptions ?? new ConfigurationOptions();
-            services.AddSingleton((s) => configurationOptions);
+            services.AddConfigurationSettingsFrom(Assembly.GetEntryAssembly(), configurationOptions, settingLifetime);
+        }
 
-            // Add required resolvers
-            services.AddSingleton<IResolver<IKeyName>,KeyNameResolver>();
+        public static void AddConfigurationSettingsFrom(this IServiceCollection services, 
+            Assembly assembly,
+            ConfigurationOptions configurationOptions = null,
+            ServiceLifetime settingLifetime = ServiceLifetime.Singleton)
+        {
+            services.AddConfigurationSettingsFrom(new[] { assembly }, configurationOptions, settingLifetime);
+        }
+
+        public static void AddConfigurationSettingsFrom(this IServiceCollection services,
+            Assembly[] assemblies,
+            ConfigurationOptions configurationOptions = null,
+            ServiceLifetime settingLifetime = ServiceLifetime.Singleton)
+        {
+            // Add required default resolvers as singletons
+            services.AddSingleton<IResolver<IKeyName>, KeyNameResolver>();
             services.AddSingleton<IResolver<IParser>, ParserResolver>();
             services.AddSingleton<IResolver<IConfigurationReader>, ConfigurationReaderResolver>();
             services.AddSingleton<IResolver<IValueConstructor>, ValueConstructorResolver>();
 
-            // Add configuration factory
-            services.AddSingleton<ConfigurationFactory>();
+            // Add configuration options instance
+            configurationOptions = configurationOptions ?? new ConfigurationOptions();
+            services.AddSingleton((s) => configurationOptions);
 
+            // Construct the configuration factory service descriptor
+            var configDescriptor = new ServiceDescriptor(typeof(ConfigurationFactory), 
+                typeof(ConfigurationFactory),
+                settingLifetime);
+
+            services.Add(configDescriptor);
+
+            // Get the setting types in the assemblies specified
             var settingTypes = GetConfigurationSettings(assemblies);
 
             foreach (var settingType in settingTypes)
             {
-                services.AddSingleton(settingType, (s) =>
-                        {
-                            var factory = s.GetService<ConfigurationFactory>();
-                            return factory.CreateConfigurationSetting(settingType);
-                        });
+                // Construct our service descriptor
+                var settingDescriptor = new ServiceDescriptor(settingType, 
+                        (s) =>
+                            {
+                                var factory = s.GetService<ConfigurationFactory>();
+                                return factory.CreateConfigurationSetting(settingType);
+                            }, 
+                        settingLifetime);
+
+                services.Add(settingDescriptor);
             }
         }
 

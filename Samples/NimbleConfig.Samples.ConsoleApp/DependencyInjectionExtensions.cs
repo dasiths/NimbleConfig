@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NimbleConfig.Core.Configuration;
 using NimbleConfig.Core.ConfigurationReaders;
@@ -14,16 +15,27 @@ using NimbleConfig.Core.ValueConstructors;
 
 namespace NimbleConfig.Samples.ConsoleApp
 {
-    public static class ServiceCollectionExtensions
+    public static class DependencyInjectionExtensions
     {
-        public static void AddConfigurationSettingsFrom(this IServiceCollection services, Assembly[] assemblies, ConfigurationOptions configurationOptions = null)
+        public static ServiceProvider SetupConfigurationDependencies(this IConfiguration configuration, 
+            Assembly[] assemblies,
+            ConfigurationOptions configurationOptions = null)
         {
+            // Configure your DI Container
+            // We are using 'Microsoft.Extensions.DependencyInjection' in this example
+            // but you can use your favourite one like Autofac, StructureMap, Ninject etc
+
+            var services = new ServiceCollection();
+
+            // Add single IConfiguration
+            services.AddSingleton(configuration);
+
             // Add configuration options instance
             configurationOptions = configurationOptions ?? new ConfigurationOptions();
             services.AddSingleton((s) => configurationOptions);
 
             // Add required resolvers
-            services.AddSingleton<IResolver<IKeyName>,KeyNameResolver>();
+            services.AddSingleton<IResolver<IKeyName>, KeyNameResolver>();
             services.AddSingleton<IResolver<IParser>, ParserResolver>();
             services.AddSingleton<IResolver<IConfigurationReader>, ConfigurationReaderResolver>();
             services.AddSingleton<IResolver<IValueConstructor>, ValueConstructorResolver>();
@@ -41,6 +53,8 @@ namespace NimbleConfig.Samples.ConsoleApp
                             return factory.CreateConfigurationSetting(settingType);
                         });
             }
+
+            return services.BuildServiceProvider();
         }
 
         public static IEnumerable<Type> GetConfigurationSettings(Assembly[] assemblies)
