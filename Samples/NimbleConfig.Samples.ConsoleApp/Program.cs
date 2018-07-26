@@ -10,22 +10,18 @@ namespace NimbleConfig.Samples.ConsoleApp
     {
         static void Main(string[] args)
         {
-            // Construct the IConfiguration
+            // Step 1. Construct the IConfiguration
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json");
 
             var configuration = (IConfiguration)builder.Build();
 
-            // Configure your DI Container
-            // We are using 'Microsoft.Extensions.DependencyInjection' in this example
-            // but you can use your favourite one like Autofac, StructureMap, Ninject etc
+            // Step 2. Configure your DI container
+            // See SetupConfigurationDependencies() method on how to register your config settings
+            var serviceProvider = configuration.SetupConfigurationDependencies(new [] {Assembly.GetEntryAssembly()});
 
-            var collection = new ServiceCollection();
-            collection.AddSingleton(configuration);
-            collection.AddConfigurationSettingsFrom(new[] { Assembly.GetExecutingAssembly() });
-            var serviceProvider = collection.BuildServiceProvider();
-
+            // Step 3. Use it.
             // Get the setting from DI Container
             var setting = serviceProvider.GetRequiredService<SomeSetting>();
 

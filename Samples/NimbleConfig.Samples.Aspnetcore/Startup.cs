@@ -17,6 +17,11 @@ namespace NimbleConfig.Samples.Aspnetcore
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json");
 
+            /* Note:
+             * reloadOnChange: true works only if you have a
+             * lifetime scope for your config settings
+             */
+
             Configuration = builder.Build();
         }
 
@@ -25,12 +30,14 @@ namespace NimbleConfig.Samples.Aspnetcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Wire up our settings
-            var assemblies = new[] { typeof(Startup).Assembly };
-            services.AddConfigurationSettingsFrom(assemblies);
+            services.AddConfigurationSettings();
+
+            /* Note: You can use AddConfigurationSettings(settingLifetime: ServiceLifetime.Scoped)
+             * for per request settings that read the latest value from config
+             */
 
             services.AddLogging();
 
@@ -38,19 +45,9 @@ namespace NimbleConfig.Samples.Aspnetcore
             services.AddSingleton<IConfigLogger, CustomConfigConfigLogger>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
+            app.UseDeveloperExceptionPage();
             app.UseMvc();
         }
     }
