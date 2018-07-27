@@ -21,11 +21,11 @@ namespace NimbleConfig.Core.ValueConstructors
             parser.EnsureNotNull(nameof(parser));
 
             dynamic config = Activator.CreateInstance(configType);
-            var value = reader.Read(configuration, configType, keyName);
+            var rawValue = reader.Read(configuration, configType, keyName);
             var genericType = configType.GetGenericTypeOfConfigurationSetting();
-            object ParserFunc(object rawValue) => parser.Parse(genericType, rawValue);
+            dynamic value =  parser.Parse(genericType, rawValue);
 
-            config.SetValue(value, (Func<object, object>)ParserFunc);
+            config.SetValue(value);
             return config;
         }
     }
