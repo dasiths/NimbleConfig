@@ -21,5 +21,12 @@ namespace NimbleConfig.Core.Tests
             SomeComplexSetting config = _configurationFactory.CreateConfigurationSetting(typeof(SomeComplexSetting));
             config.SomeProperty.ShouldBe("SomeValue");
         }
+
+        [Fact]
+        public void CantResolveMissingComplexSetting()
+        {
+            SomeUnresolvedComplexSetting config = _configurationFactory.CreateConfigurationSetting(typeof(SomeUnresolvedComplexSetting));
+            config.ShouldBeNull();
+        }
     }
 }
