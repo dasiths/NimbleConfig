@@ -5,10 +5,10 @@ namespace NimbleConfig.Samples.Aspnetcore.Settings
 {
     public class VeryStrangeSetting:ConfigurationSetting<int>
     {
-        public override void SetValue(object rawConfigValue, Func<object, object> valueParserFunc)
+        public override void SetValue(int value)
         {
-            var useDefaultValue = rawConfigValue.ToString() == "default";
-            var number = useDefaultValue ? 100 : (int)valueParserFunc(rawConfigValue);
+            var useDefaultValue = value == 0;
+            var number = useDefaultValue ? 100 : value;
 
             Value = number;
         }
