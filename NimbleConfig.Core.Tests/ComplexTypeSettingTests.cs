@@ -1,4 +1,6 @@
-﻿using NimbleConfig.Core.Factory;
+﻿using NimbleConfig.Core.Exceptions;
+using NimbleConfig.Core.Factory;
+using NimbleConfig.Core.Options;
 using NimbleConfig.Core.Tests.Settings;
 using NimbleConfig.Core.Tests.Setup;
 using Shouldly;
@@ -8,7 +10,7 @@ namespace NimbleConfig.Core.Tests
 {
     public class ComplexTypeSettingTests
     {
-        private readonly ConfigurationFactory _configurationFactory;
+        private ConfigurationFactory _configurationFactory;
 
         public ComplexTypeSettingTests()
         {
@@ -27,6 +29,17 @@ namespace NimbleConfig.Core.Tests
         {
             SomeUnresolvedComplexSetting config = _configurationFactory.CreateConfigurationSetting(typeof(SomeUnresolvedComplexSetting));
             config.ShouldBeNull();
+        }
+
+        [Fact]
+        public void MissingStringThrowsException()
+        {
+            _configurationFactory = ConfigurationFactoryCreator.Create(MissingConfigurationStratergy.ThrowException);
+
+            Should.Throw<ConfigurationSettingMissingException>(() =>
+            {
+                _configurationFactory.CreateConfigurationSetting(typeof(SomeUnresolvedComplexSetting));
+            });
         }
     }
 }

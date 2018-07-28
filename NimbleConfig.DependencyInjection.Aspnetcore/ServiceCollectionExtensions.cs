@@ -17,7 +17,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
     public static class ServiceCollectionExtensions
     {
         public static void AddConfigurationSettings(this IServiceCollection services,
-            ConfigurationOptions configurationOptions = null,
+            IConfigurationOptions configurationOptions = null,
             ServiceLifetime settingLifetime = ServiceLifetime.Singleton)
         {
             services.AddConfigurationSettingsFrom(Assembly.GetEntryAssembly(), configurationOptions, settingLifetime);
@@ -25,7 +25,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
 
         public static void AddConfigurationSettingsFrom(this IServiceCollection services, 
             Assembly assembly,
-            ConfigurationOptions configurationOptions = null,
+            IConfigurationOptions configurationOptions = null,
             ServiceLifetime settingLifetime = ServiceLifetime.Singleton)
         {
             services.AddConfigurationSettingsFrom(new[] { assembly }, configurationOptions, settingLifetime);
@@ -33,7 +33,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
 
         public static void AddConfigurationSettingsFrom(this IServiceCollection services,
             Assembly[] assemblies,
-            ConfigurationOptions configurationOptions = null,
+            IConfigurationOptions configurationOptions = null,
             ServiceLifetime settingLifetime = ServiceLifetime.Singleton)
         {
             // Add required default resolvers as singletons
@@ -44,7 +44,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
 
             // Add configuration options instance
             configurationOptions = configurationOptions ?? new ConfigurationOptions();
-            services.AddSingleton((s) => configurationOptions);
+            services.AddSingleton<IConfigurationOptions>((s) => configurationOptions);
 
             // Construct the configuration factory service descriptor
             var configDescriptor = new ServiceDescriptor(typeof(ConfigurationFactory), 

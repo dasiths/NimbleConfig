@@ -4,6 +4,6 @@ namespace NimbleConfig.Core.Parsers
 {
     public interface IParser
     {
-        object Parse(Type toType, object value);
+        object Parse(Type configType, object value);
     }
 }

@@ -19,10 +19,10 @@ namespace NimbleConfig.Core.Factory
         private readonly IResolver<IValueConstructor> _valueConstructorResolver;
 
         private readonly IConfiguration _configuration;
-        private readonly ConfigurationOptions _configurationOptions;
+        private readonly IConfigurationOptions _configurationOptions;
 
         public ConfigurationFactory(IConfiguration configuration,
-            ConfigurationOptions configurationOptions,
+            IConfigurationOptions configurationOptions,
             IResolver<IKeyName> keyNameResolver,
             IResolver<IConfigurationReader> configurationReaderResolver,
             IResolver<IParser> parserResolver,
@@ -47,8 +47,6 @@ namespace NimbleConfig.Core.Factory
 
         public dynamic CreateConfigurationSetting(Type configType)
         {
-            // Todo: handle missing config settings
-
             try
             {
                 StaticLoggingHelper.Debug($"Trying to resolve value for: {configType}");
@@ -56,7 +54,7 @@ namespace NimbleConfig.Core.Factory
                 // Resolve the key and prefix names
                 var keyName = _keyNameResolver.Resolve(configType, _configurationOptions);
 
-                // Read configuration value
+                // Pick configuration value reader
                 var reader = _configurationReaderResolver.Resolve(configType, _configurationOptions);
 
                 // Pick parser
@@ -65,8 +63,18 @@ namespace NimbleConfig.Core.Factory
                 // Pick constructor
                 var valueConstructor = _valueConstructorResolver.Resolve(configType, _configurationOptions);
 
+                // Ensure all required instances are present
+                keyName.EnsureNotNull(nameof(IKeyName));
+                reader.EnsureNotNull(nameof(IConfigurationReader));
+                parser.EnsureNotNull(nameof(IParser));
+                valueConstructor.EnsureNotNull(nameof(IValueConstructor));
+
+                // Read and parse the value
+                var rawValue = reader.Read(_configuration, configType, keyName, _configurationOptions.MissingConfigurationStratergy);
+                var value = parser.Parse(configType, rawValue);
+
                 // Set the value
-                var configSetting = valueConstructor?.ConstructValue(_configuration, configType, keyName, reader, parser);
+                var configSetting = valueConstructor?.ConstructValue(configType, value);
 
                 StaticLoggingHelper.Debug($"Resolved value for: {configType}");
 

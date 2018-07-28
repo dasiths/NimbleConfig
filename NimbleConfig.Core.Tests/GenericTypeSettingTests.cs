@@ -1,4 +1,6 @@
-﻿using NimbleConfig.Core.Factory;
+﻿using NimbleConfig.Core.Exceptions;
+using NimbleConfig.Core.Factory;
+using NimbleConfig.Core.Options;
 using NimbleConfig.Core.Tests.Settings;
 using NimbleConfig.Core.Tests.Setup;
 using Xunit;
@@ -8,7 +10,7 @@ namespace NimbleConfig.Core.Tests
 {
     public class GenericTypeSettingTests
     {
-        private readonly ConfigurationFactory _configurationFactory;
+        private ConfigurationFactory _configurationFactory;
 
         public GenericTypeSettingTests()
         {
@@ -88,6 +90,17 @@ namespace NimbleConfig.Core.Tests
         {
             SomeUnresolvedSetting config = _configurationFactory.CreateConfigurationSetting(typeof(SomeUnresolvedSetting));
             string.IsNullOrEmpty(config.Value).ShouldBeTrue();
+        }
+
+        [Fact]
+        public void MissingStringThrowsException()
+        {
+            _configurationFactory = ConfigurationFactoryCreator.Create(MissingConfigurationStratergy.ThrowException);
+
+            Should.Throw<ConfigurationSettingMissingException>(() =>
+            {
+                _configurationFactory.CreateConfigurationSetting(typeof(SomeUnresolvedSetting));
+            });
         }
 
 

@@ -17,7 +17,7 @@ namespace NimbleConfig.Core.Resolvers
         private static readonly IConfigurationReader ComplexTypeConfigurationReader =
             new ComplexTypeConfigurationReader();
 
-        public IConfigurationReader Resolve(Type type, ConfigurationOptions configurationOptions)
+        public IConfigurationReader Resolve(Type type, IConfigurationOptions configurationOptions)
         {
             var autoResolvedReader = ResolveInternally(type, configurationOptions);
 
@@ -27,7 +27,7 @@ namespace NimbleConfig.Core.Resolvers
             return customReader ?? autoResolvedReader;
         }
 
-        public IConfigurationReader ResolveInternally(Type type, ConfigurationOptions configurationOptions)
+        public IConfigurationReader ResolveInternally(Type type, IConfigurationOptions configurationOptions)
         {
             if (type.GetConfigurationSettingType() == ConfigurationSettingType.GenericType)
             {
