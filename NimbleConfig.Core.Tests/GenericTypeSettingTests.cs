@@ -93,9 +93,12 @@ namespace NimbleConfig.Core.Tests
         }
 
         [Fact]
-        public void MissingStringThrowsException()
+        public void MissingStringSettingThrowsException()
         {
-            _configurationFactory = ConfigurationFactoryCreator.Create(MissingConfigurationStratergy.ThrowException);
+            _configurationFactory = ConfigurationFactoryCreator.Create(new ConfigurationOptions()
+            {
+                MissingConfigurationStratergy = MissingConfigurationStratergy.ThrowException
+            });
 
             Should.Throw<ConfigurationSettingMissingException>(() =>
             {

@@ -8,7 +8,7 @@ namespace NimbleConfig.Core.Tests.Setup
 {
     public class ConfigurationFactoryCreator
     {
-        public static ConfigurationFactory Create(MissingConfigurationStratergy configurationStratergy = MissingConfigurationStratergy.IgnoreAndUseDefaultOrNull)
+        public static ConfigurationFactory Create(IConfigurationOptions options = null)
         {
             // Construct the IConfiguration
             var builder = new ConfigurationBuilder()
@@ -23,10 +23,7 @@ namespace NimbleConfig.Core.Tests.Setup
             var configResolver = new ConfigurationReaderResolver();
             var constructorResolver = new ValueConstructorResolver();
 
-            var options = new ConfigurationOptions()
-            {
-                MissingConfigurationStratergy = configurationStratergy
-            };
+            options = options ?? new ConfigurationOptions();
 
             var configuratinFactory = new ConfigurationFactory(configuration,
                 options,
