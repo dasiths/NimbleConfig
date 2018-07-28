@@ -9,7 +9,6 @@ namespace NimbleConfig.Core.Resolvers
     public class ParserResolver: IResolver<IParser>
     {
         private static readonly DefaultParser DefaultParser = new DefaultParser();
-        private static readonly EnumParser EnumParser = new EnumParser();
 
         public IParser Resolve(Type configType, ConfigurationOptions configurationOptions)
         {
@@ -25,11 +24,6 @@ namespace NimbleConfig.Core.Resolvers
 
         public IParser ResolveInternally(Type valueType, ConfigurationOptions configurationOptions)
         {
-            if (valueType.IsEnum)
-            {
-                return EnumParser;
-            }
-
             return DefaultParser;
         }
 
