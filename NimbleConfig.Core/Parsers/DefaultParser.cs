@@ -1,25 +1,36 @@
 ﻿using System;
+using NimbleConfig.Core.Configuration;
+using NimbleConfig.Core.Extensions;
 
 namespace NimbleConfig.Core.Parsers
 {
     public class DefaultParser : IParser
     {
-        object IParser.Parse(Type toType, object value)
+        object IParser.Parse(Type configType, object value)
         {
             if (value == null)
             {
                 return null;
             }
 
-            var elementType = toType.GetElementType();
-
-            // Handle complex type arrays
-            if (toType.IsArray && elementType != null && !elementType.IsValueType)
+            if (configType.GetConfigurationSettingType() == ConfigurationSettingType.GenericType)
             {
-                return ParseArray(value, elementType);
+                var genericType = configType.GetGenericTypeOfConfigurationSetting();
+
+                var elementType = genericType.GetElementType();
+
+                // Handle complex type arrays like ConfigurationSetting<int[]>
+                if (genericType.IsArray && elementType != null && !elementType.IsValueType)
+                {
+                    return ParseArray(value, elementType);
+                }
+
+                // Handle value type
+                return ChangeType(value, genericType);
             }
 
-            return ChangeType(value, toType);
+            // Handle complex type
+            return ChangeType(value, configType);
         }
 
         private static object ParseArray(object value, Type elementType)

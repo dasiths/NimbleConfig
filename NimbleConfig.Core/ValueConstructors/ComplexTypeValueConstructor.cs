@@ -9,19 +9,8 @@ namespace NimbleConfig.Core.ValueConstructors
 {
     public class ComplexTypeValueConstructor : IValueConstructor
     {
-        public dynamic ConstructValue(IConfiguration configuration,
-            Type configType,
-            IKeyName keyName,
-            IConfigurationReader reader,
-            IParser parser)
+        public dynamic ConstructValue(Type configType, dynamic value)
         {
-            configuration.EnsureNotNull(nameof(configuration));
-            keyName.EnsureNotNull(nameof(keyName));
-            reader.EnsureNotNull(nameof(reader));
-            parser.EnsureNotNull(nameof(parser));
-
-            var value = reader.Read(configuration, configType, keyName);
-            value = parser == null ? value : parser.Parse(configType, value);
             return value;
         }
     }

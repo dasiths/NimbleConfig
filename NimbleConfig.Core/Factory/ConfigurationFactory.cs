@@ -56,7 +56,7 @@ namespace NimbleConfig.Core.Factory
                 // Resolve the key and prefix names
                 var keyName = _keyNameResolver.Resolve(configType, _configurationOptions);
 
-                // Read configuration value
+                // Pick configuration value reader
                 var reader = _configurationReaderResolver.Resolve(configType, _configurationOptions);
 
                 // Pick parser
@@ -65,8 +65,18 @@ namespace NimbleConfig.Core.Factory
                 // Pick constructor
                 var valueConstructor = _valueConstructorResolver.Resolve(configType, _configurationOptions);
 
+                // Ensure all required instances are present
+                keyName.EnsureNotNull(nameof(IKeyName));
+                reader.EnsureNotNull(nameof(IConfigurationReader));
+                parser.EnsureNotNull(nameof(IParser));
+                valueConstructor.EnsureNotNull(nameof(IValueConstructor));
+
+                // Read and parse the value
+                var rawValue = reader.Read(_configuration, configType, keyName);
+                var value = parser.Parse(configType, rawValue);
+
                 // Set the value
-                var configSetting = valueConstructor?.ConstructValue(_configuration, configType, keyName, reader, parser);
+                var configSetting = valueConstructor?.ConstructValue(configType, value);
 
                 StaticLoggingHelper.Debug($"Resolved value for: {configType}");
 

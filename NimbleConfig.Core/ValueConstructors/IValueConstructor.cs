@@ -8,10 +8,6 @@ namespace NimbleConfig.Core.ValueConstructors
 {
     public interface IValueConstructor
     {
-        dynamic ConstructValue(IConfiguration configuration,
-            Type configType,
-            IKeyName keyName,
-            IConfigurationReader reader,
-            IParser parser);
+        dynamic ConstructValue(Type configType, dynamic value);
     }
 }
