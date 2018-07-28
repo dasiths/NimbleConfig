@@ -49,7 +49,7 @@ namespace NimbleConfig.Core.Factory
         {
             try
             {
-                StaticLoggingHelper.Debug($"Trying to resolve value for: {configType}");
+                StaticLoggingHelper.Debug($"{configType} - Trying to resolve value.");
 
                 // Resolve the key and prefix names
                 var keyName = _keyNameResolver.Resolve(configType, _configurationOptions);
@@ -76,7 +76,7 @@ namespace NimbleConfig.Core.Factory
                 // Set the value
                 var configSetting = valueConstructor?.ConstructValue(configType, value);
 
-                StaticLoggingHelper.Debug($"Resolved value for: {configType}");
+                StaticLoggingHelper.Debug($"{configType} - Value resolved successfully.");
 
                 return configSetting;
             }
