@@ -8,7 +8,7 @@ namespace NimbleConfig.Core.Resolvers
 {
     public class KeyNameResolver: IResolver<IKeyName>
     {
-        public IKeyName Resolve(Type type, ConfigurationOptions configurationOptions)
+        public IKeyName Resolve(Type type, IConfigurationOptions configurationOptions)
         {
             var autoResolvedKeyName = ResolveInternally(type, configurationOptions);
             
@@ -18,7 +18,7 @@ namespace NimbleConfig.Core.Resolvers
             return customKeyName ?? autoResolvedKeyName;
         }
 
-        private IKeyName ResolveInternally(Type type, ConfigurationOptions configurationOptions)
+        private IKeyName ResolveInternally(Type type, IConfigurationOptions configurationOptions)
         {
             var prefix = string.Empty;
 

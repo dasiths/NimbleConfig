@@ -5,6 +5,6 @@ namespace NimbleConfig.Core.Resolvers
 {
     public interface IResolver<out T>
     {
-        T Resolve(Type configType, ConfigurationOptions configurationOptions);
+        T Resolve(Type configType, IConfigurationOptions configurationOptions);
     }
 }

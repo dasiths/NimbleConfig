@@ -19,10 +19,10 @@ namespace NimbleConfig.Core.Factory
         private readonly IResolver<IValueConstructor> _valueConstructorResolver;
 
         private readonly IConfiguration _configuration;
-        private readonly ConfigurationOptions _configurationOptions;
+        private readonly IConfigurationOptions _configurationOptions;
 
         public ConfigurationFactory(IConfiguration configuration,
-            ConfigurationOptions configurationOptions,
+            IConfigurationOptions configurationOptions,
             IResolver<IKeyName> keyNameResolver,
             IResolver<IConfigurationReader> configurationReaderResolver,
             IResolver<IParser> parserResolver,

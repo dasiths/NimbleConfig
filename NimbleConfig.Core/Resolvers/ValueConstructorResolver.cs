@@ -11,7 +11,7 @@ namespace NimbleConfig.Core.Resolvers
         private static readonly IValueConstructor ComplexTypeValueConstructor = new ComplexTypeValueConstructor();
         private static readonly IValueConstructor GenericTypeValueConstructor = new GenericTypeValueConstructor();
 
-        public IValueConstructor Resolve(Type configType, ConfigurationOptions configurationOptions)
+        public IValueConstructor Resolve(Type configType, IConfigurationOptions configurationOptions)
         {
             var autoResolvedConstructor = ResolveInternally(configType, configurationOptions);
 
@@ -21,7 +21,7 @@ namespace NimbleConfig.Core.Resolvers
             return customConstructor ?? autoResolvedConstructor;
         }
 
-        public IValueConstructor ResolveInternally(Type configType, ConfigurationOptions configurationOptions)
+        public IValueConstructor ResolveInternally(Type configType, IConfigurationOptions configurationOptions)
         {
             var settingType = configType.GetConfigurationSettingType();
 

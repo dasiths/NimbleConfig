@@ -8,7 +8,7 @@ namespace NimbleConfig.Core.Resolvers
     {
         private static readonly DefaultParser DefaultParser = new DefaultParser();
 
-        public IParser Resolve(Type configType, ConfigurationOptions configurationOptions)
+        public IParser Resolve(Type configType, IConfigurationOptions configurationOptions)
         {
             var autoResolvedParser = ResolveInternally(configType, configurationOptions);
 
@@ -18,7 +18,7 @@ namespace NimbleConfig.Core.Resolvers
             return customParser ?? autoResolvedParser;
         }
 
-        public IParser ResolveInternally(Type configType, ConfigurationOptions configurationOptions)
+        public IParser ResolveInternally(Type configType, IConfigurationOptions configurationOptions)
         {
             return DefaultParser;
         }

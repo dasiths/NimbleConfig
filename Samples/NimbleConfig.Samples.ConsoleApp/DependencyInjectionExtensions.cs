@@ -19,7 +19,7 @@ namespace NimbleConfig.Samples.ConsoleApp
     {
         public static ServiceProvider SetupConfigurationDependencies(this IConfiguration configuration, 
             Assembly[] assemblies,
-            ConfigurationOptions configurationOptions = null)
+            IConfigurationOptions configurationOptions = null)
         {
             // Configure your DI Container
             // We are using 'Microsoft.Extensions.DependencyInjection' in this example
@@ -32,7 +32,7 @@ namespace NimbleConfig.Samples.ConsoleApp
 
             // Add configuration options instance
             configurationOptions = configurationOptions ?? new ConfigurationOptions();
-            services.AddSingleton((s) => configurationOptions);
+            services.AddSingleton<IConfigurationOptions>((s) => configurationOptions);
 
             // Add required resolvers
             services.AddSingleton<IResolver<IKeyName>, KeyNameResolver>();
