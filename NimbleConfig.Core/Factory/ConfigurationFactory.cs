@@ -47,8 +47,6 @@ namespace NimbleConfig.Core.Factory
 
         public dynamic CreateConfigurationSetting(Type configType)
         {
-            // Todo: handle missing config settings
-
             try
             {
                 StaticLoggingHelper.Debug($"Trying to resolve value for: {configType}");
@@ -72,7 +70,7 @@ namespace NimbleConfig.Core.Factory
                 valueConstructor.EnsureNotNull(nameof(IValueConstructor));
 
                 // Read and parse the value
-                var rawValue = reader.Read(_configuration, configType, keyName);
+                var rawValue = reader.Read(_configuration, configType, keyName, _configurationOptions.MissingConfigurationStratergy);
                 var value = parser.Parse(configType, rawValue);
 
                 // Set the value
