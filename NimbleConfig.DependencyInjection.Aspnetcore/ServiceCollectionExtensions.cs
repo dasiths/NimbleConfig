@@ -46,7 +46,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             services.AddSingleton<IResolver<IValueConstructor>, ValueConstructorResolver>();
 
             // Add configuration options instance
-            configurationOptions = configurationOptions ?? new ConfigurationOptions();
+            configurationOptions = configurationOptions ?? ConfigurationOptionFactory.Create();
             services.AddSingleton<IConfigurationOptions>((s) => configurationOptions);
 
             // Construct the configuration factory service descriptor

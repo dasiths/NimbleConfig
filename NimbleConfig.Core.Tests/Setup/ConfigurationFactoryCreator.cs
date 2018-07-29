@@ -23,7 +23,7 @@ namespace NimbleConfig.Core.Tests.Setup
             var configResolver = new ConfigurationReaderResolver();
             var constructorResolver = new ValueConstructorResolver();
 
-            options = options ?? new ConfigurationOptions();
+            options = options ?? ConfigurationOptionFactory.Create();
 
             var configuratinFactory = new ConfigurationFactory(configuration,
                 options,

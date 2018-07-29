@@ -16,7 +16,7 @@ namespace NimbleConfig.Core.Resolvers
             var autoResolvedConstructor = ResolveInternally(configType, configurationOptions);
 
             // Try to resolve a custom constructor from options
-            var customConstructor = configurationOptions.CustomValueConstructor?.Invoke(configType, autoResolvedConstructor);
+            var customConstructor = configurationOptions.CustomConstructor?.Invoke(configType, autoResolvedConstructor);
 
             return customConstructor ?? autoResolvedConstructor;
         }

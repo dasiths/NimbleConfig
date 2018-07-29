@@ -1,4 +1,5 @@
 ﻿using NimbleConfig.Core.Configuration;
+using NimbleConfig.Core.Factory;
 using NimbleConfig.Core.Options;
 using NimbleConfig.Core.Tests.Settings;
 using NimbleConfig.Core.Tests.Setup;
@@ -12,18 +13,18 @@ namespace NimbleConfig.Core.Tests
         [Fact]
         public void CanResolveSettingWithCustomName()
         {
-            var configurationFactory = ConfigurationFactoryCreator.Create(new ConfigurationOptions()
+            var options = ConfigurationOptionFactory.Create();
+            options.CustomKeyName = (type, name) =>
             {
-                CustomKeyName = (type, name) =>
+                if (type == typeof(SomeDecimalSetting))
                 {
-                    if (type == typeof(SomeDecimalSetting))
-                    {
-                        return new KeyName("SomeSection:", name.QualifiedKeyName);
-                    }
-
-                    return name;
+                    return new KeyName("SomeSection:", name.QualifiedKeyName);
                 }
-            });
+
+                return name;
+            };
+
+            var configurationFactory = ConfigurationFactoryCreator.Create(options);
 
             SomeDecimalSetting config = configurationFactory.CreateConfigurationSetting(typeof(SomeDecimalSetting));
             config.Value.ShouldBeOfType<decimal>();
@@ -33,19 +34,19 @@ namespace NimbleConfig.Core.Tests
         [Fact]
         public void CanResolveSettingWithWithAttribute()
         {
-            var configurationFactory = ConfigurationFactoryCreator.Create(new ConfigurationOptions()
+            var options = ConfigurationOptionFactory.Create();
+            options.CustomKeyName = (type, name) =>
             {
-                CustomKeyName = (type, name) =>
+                if (type == typeof(SomeDecimalSettingWithAttribute))
                 {
-                    if (type == typeof(SomeDecimalSettingWithAttribute))
-                    {
-                        name.QualifiedKeyName.ShouldBe("SomeDecimalSetting");
-                        return new KeyName("SomeSection:", name.QualifiedKeyName);
-                    }
-
-                    return name;
+                    name.QualifiedKeyName.ShouldBe("SomeDecimalSetting");
+                    return new KeyName("SomeSection:", name.QualifiedKeyName);
                 }
-            });
+
+                return name;
+            };
+
+            var configurationFactory = ConfigurationFactoryCreator.Create(options);
 
             SomeDecimalSettingWithAttribute config = configurationFactory.CreateConfigurationSetting(typeof(SomeDecimalSettingWithAttribute));
             config.Value.ShouldBeOfType<decimal>();
