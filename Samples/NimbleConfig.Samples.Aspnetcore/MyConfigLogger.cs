@@ -4,11 +4,11 @@ using NimbleConfig.Core.Logging;
 
 namespace NimbleConfig.Samples.Aspnetcore
 {
-    public class CustomConfigConfigLogger: IConfigLogger
+    public class MyConfigLogger: IConfigLogger
     {
-        private readonly ILogger<CustomConfigConfigLogger> _logger;
+        private readonly ILogger<MyConfigLogger> _logger;
 
-        public CustomConfigConfigLogger(ILogger<CustomConfigConfigLogger> logger)
+        public MyConfigLogger(ILogger<MyConfigLogger> logger)
         {
             _logger = logger;
         }

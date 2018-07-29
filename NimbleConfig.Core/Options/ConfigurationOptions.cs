@@ -2,13 +2,13 @@
 {
     public class ConfigurationOptions : IConfigurationOptions
     {
-        public ConfigurationOptionDelegates.CustomKeyNameResolverDelegate CustomKeyName { get; set; }
+        public ConfigurationOptionDelegates.CustomKeyNameFunc CustomKeyName { get; set; }
 
-        public ConfigurationOptionDelegates.CustomParserResolverDelegate CustomParser { get; set; }
+        public ConfigurationOptionDelegates.CustomParserFunc CustomParser { get; set; }
 
-        public ConfigurationOptionDelegates.CustomConfigurationReaderDelegate CustomConfigurationReader { get; set; }
+        public ConfigurationOptionDelegates.CustomReaderFunc CustomReader { get; set; }
 
-        public ConfigurationOptionDelegates.CustomValueConstructorDelegate CustomValueConstructor { get; set; }
+        public ConfigurationOptionDelegates.CustomConstructorFunc CustomConstructor { get; set; }
 
         /// <summary>
         /// The stratergy to use when a configuration setting is missing

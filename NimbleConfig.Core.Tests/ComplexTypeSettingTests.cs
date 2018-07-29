@@ -27,14 +27,18 @@ namespace NimbleConfig.Core.Tests
         [Fact]
         public void CantResolveMissingComplexSetting()
         {
-            SomeUnresolvedComplexSetting config = _configurationFactory.CreateConfigurationSetting(typeof(SomeUnresolvedComplexSetting));
+            SomeUnresolvedComplexSetting config =
+                _configurationFactory.CreateConfigurationSetting(typeof(SomeUnresolvedComplexSetting));
             config.ShouldBeNull();
         }
 
         [Fact]
-        public void MissingStringThrowsException()
+        public void MissingComplexSettingThrowsException()
         {
-            _configurationFactory = ConfigurationFactoryCreator.Create(MissingConfigurationStratergy.ThrowException);
+            var options = ConfigurationOptionFactory.Create();
+            options.MissingConfigurationStratergy = MissingConfigurationStratergy.ThrowException;
+
+            _configurationFactory = ConfigurationFactoryCreator.Create(options);
 
             Should.Throw<ConfigurationSettingMissingException>(() =>
             {

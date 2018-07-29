@@ -18,23 +18,26 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
     {
         public static void AddConfigurationSettings(this IServiceCollection services,
             IConfigurationOptions configurationOptions = null,
-            ServiceLifetime settingLifetime = ServiceLifetime.Singleton)
+            ServiceLifetime settingLifetime = ServiceLifetime.Singleton,
+            Type[] ignoreTypes = null)
         {
-            services.AddConfigurationSettingsFrom(Assembly.GetEntryAssembly(), configurationOptions, settingLifetime);
+            services.AddConfigurationSettingsFrom(Assembly.GetEntryAssembly(), configurationOptions, settingLifetime, ignoreTypes);
         }
 
-        public static void AddConfigurationSettingsFrom(this IServiceCollection services, 
+        public static void AddConfigurationSettingsFrom(this IServiceCollection services,
             Assembly assembly,
             IConfigurationOptions configurationOptions = null,
-            ServiceLifetime settingLifetime = ServiceLifetime.Singleton)
+            ServiceLifetime settingLifetime = ServiceLifetime.Singleton,
+            Type[] ignoreTypes = null)
         {
-            services.AddConfigurationSettingsFrom(new[] { assembly }, configurationOptions, settingLifetime);
+            services.AddConfigurationSettingsFrom(new[] { assembly }, configurationOptions, settingLifetime, ignoreTypes);
         }
 
         public static void AddConfigurationSettingsFrom(this IServiceCollection services,
             Assembly[] assemblies,
             IConfigurationOptions configurationOptions = null,
-            ServiceLifetime settingLifetime = ServiceLifetime.Singleton)
+            ServiceLifetime settingLifetime = ServiceLifetime.Singleton,
+            Type[] ignoreTypes = null)
         {
             // Add required default resolvers as singletons
             services.AddSingleton<IResolver<IKeyName>, KeyNameResolver>();
@@ -43,11 +46,11 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             services.AddSingleton<IResolver<IValueConstructor>, ValueConstructorResolver>();
 
             // Add configuration options instance
-            configurationOptions = configurationOptions ?? new ConfigurationOptions();
+            configurationOptions = configurationOptions ?? ConfigurationOptionFactory.Create();
             services.AddSingleton<IConfigurationOptions>((s) => configurationOptions);
 
             // Construct the configuration factory service descriptor
-            var configDescriptor = new ServiceDescriptor(typeof(ConfigurationFactory), 
+            var configDescriptor = new ServiceDescriptor(typeof(ConfigurationFactory),
                 typeof(ConfigurationFactory),
                 settingLifetime);
 
@@ -56,15 +59,21 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             // Get the setting types in the assemblies specified
             var settingTypes = GetConfigurationSettings(assemblies);
 
+            // If an ignore list is specified
+            if (ignoreTypes != null)
+            {
+                settingTypes = settingTypes.Except(ignoreTypes);
+            }
+
             foreach (var settingType in settingTypes)
             {
                 // Construct our service descriptor
-                var settingDescriptor = new ServiceDescriptor(settingType, 
+                var settingDescriptor = new ServiceDescriptor(settingType,
                         (s) =>
                             {
                                 var factory = s.GetService<ConfigurationFactory>();
                                 return factory.CreateConfigurationSetting(settingType);
-                            }, 
+                            },
                         settingLifetime);
 
                 services.Add(settingDescriptor);

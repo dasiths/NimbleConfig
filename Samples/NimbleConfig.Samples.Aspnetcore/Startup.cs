@@ -42,7 +42,10 @@ namespace NimbleConfig.Samples.Aspnetcore
             services.AddLogging();
 
             // Optional: Adding custom logger that implements IConfigLogger
-            services.AddSingleton<IConfigLogger, CustomConfigConfigLogger>();
+            services.AddSingleton<IConfigLogger, MyConfigLogger>();
+
+            // Or use the built in console logger like this:
+            // services.AddSingleton<IConfigLogger, ConsoleConfigLogger>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

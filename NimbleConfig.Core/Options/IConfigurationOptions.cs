@@ -2,10 +2,10 @@
 {
     public interface IConfigurationOptions
     {
-        ConfigurationOptionDelegates.CustomConfigurationReaderDelegate CustomConfigurationReader { get; set; }
-        ConfigurationOptionDelegates.CustomKeyNameResolverDelegate CustomKeyName { get; set; }
-        ConfigurationOptionDelegates.CustomParserResolverDelegate CustomParser { get; set; }
-        ConfigurationOptionDelegates.CustomValueConstructorDelegate CustomValueConstructor { get; set; }
+        ConfigurationOptionDelegates.CustomReaderFunc CustomReader { get; set; }
+        ConfigurationOptionDelegates.CustomKeyNameFunc CustomKeyName { get; set; }
+        ConfigurationOptionDelegates.CustomParserFunc CustomParser { get; set; }
+        ConfigurationOptionDelegates.CustomConstructorFunc CustomConstructor { get; set; }
         MissingConfigurationStratergy MissingConfigurationStratergy { get; set; }
     }
 }
