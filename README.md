@@ -47,6 +47,7 @@ In the NuGet Package Manager Console, type:
         public ValuesController(SomeSetting someSetting, SomeComplexSetting someComplexSetting)
         {
             _someSetting = someSetting;
+            _someComplexSetting = someComplexSetting;
         }
 		
         public ActionResult<IEnumerable<string>> Get()
