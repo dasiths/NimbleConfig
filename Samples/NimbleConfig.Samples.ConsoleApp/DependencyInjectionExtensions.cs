@@ -31,7 +31,7 @@ namespace NimbleConfig.Samples.ConsoleApp
             services.AddSingleton(configuration);
 
             // Add configuration options instance
-            configurationOptions = configurationOptions ?? ConfigurationOptionFactory.Create();
+            configurationOptions = configurationOptions ?? ConfigurationOptions.Create();
             services.AddSingleton<IConfigurationOptions>((s) => configurationOptions);
 
             // Add required resolvers

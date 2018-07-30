@@ -14,5 +14,10 @@
         /// The stratergy to use when a configuration setting is missing
         /// </summary>
         public MissingConfigurationStratergy MissingConfigurationStratergy { get; set; }
+
+        public static IConfigurationOptions Create()
+        {
+            return new ConfigurationOptions();
+        }
     }
 }

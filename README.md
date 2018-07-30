@@ -20,11 +20,21 @@ In the NuGet Package Manager Console, type:
     public class SomeSetting: ConfigurationSetting<string>
     {
     }
+	
+    // or for a more complex type
+	
+    public class SomeComplexSetting : IComplexConfigurationSetting
+    {
+        public string SomeProperty { get; set; }
+    }
 ```
 3. Add it to your `appsettings.json`
 ```C#
     {
-        "SomeSetting": "SomeValue"
+        "SomeSetting": "SomeValue",
+        "SomeComplexSetting": {
+            "SomeProperty": "SomeValue"
+        }
     }
 ```
 4. Inject and use it in your controllers, services etc
@@ -32,8 +42,9 @@ In the NuGet Package Manager Console, type:
     public class ValuesController : ControllerBase
     {
         private readonly SomeSetting _someSetting;
-
-        public ValuesController(SomeSetting someSetting)
+        private readonly SomeComplexSetting _someComplexSetting;
+		
+        public ValuesController(SomeSetting someSetting, SomeComplexSetting someComplexSetting)
         {
             _someSetting = someSetting;
         }
@@ -41,9 +52,8 @@ In the NuGet Package Manager Console, type:
         public ActionResult<IEnumerable<string>> Get()
         {
             return new string[] { 
-                "value1",
-                "value2",
-                _someSetting.Value
+                _someSetting.Value,
+                _someComplexSetting.SomeProperty
             };
         }
     }
@@ -53,8 +63,9 @@ In the NuGet Package Manager Console, type:
     public void ConfigureServices(IServiceCollection services)
     {
         // Other services go here
-
-        services.AddConfigurationSettings(); // Wire it up
+		
+        // Wire it up using the fluent api
+        services.AddConfigurationSettings().AndBuild();
     }
 ```
 

@@ -4,7 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NimbleConfig.Core.Extensions;
+using NimbleConfig.Core.Factory;
 using NimbleConfig.Core.Logging;
+using NimbleConfig.Core.Options;
 using NimbleConfig.DependencyInjection.Aspnetcore;
 
 namespace NimbleConfig.Samples.Aspnetcore
@@ -32,10 +35,15 @@ namespace NimbleConfig.Samples.Aspnetcore
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // Wire up our settings
-            services.AddConfigurationSettings();
+            // Ignore missing settings
+            var configOptions = ConfigurationOptions.Create().IgnoreMissingSettings();
 
-            /* Note: You can use AddConfigurationSettings(settingLifetime: ServiceLifetime.Scoped)
+            // Wire up our settings
+            services.AddConfigurationSettings()
+                .WithConfigurationOptions(configOptions)
+                .AndBuild();
+
+            /* Note: You can use AddConfigurationSettings().WithScopedInstances().AndBuild()
              * for per request settings that read the latest value from config
              */
 

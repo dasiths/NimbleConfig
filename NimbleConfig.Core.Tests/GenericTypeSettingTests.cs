@@ -95,7 +95,7 @@ namespace NimbleConfig.Core.Tests
         [Fact]
         public void MissingStringSettingThrowsException()
         {
-            var options = ConfigurationOptionFactory.Create();
+            var options = ConfigurationOptions.Create();
             options.MissingConfigurationStratergy = MissingConfigurationStratergy.ThrowException;
 
             _configurationFactory = ConfigurationFactoryCreator.Create(options);
