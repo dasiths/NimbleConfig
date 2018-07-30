@@ -14,7 +14,7 @@ namespace NimbleConfig.Core.Tests
         [Fact]
         public void CanResolveSettingWithCustomName()
         {
-            var options = ConfigurationOptionFactory.Create();
+            var options = ConfigurationOptions.Create();
             options.WithNamingScheme((type, name) =>
             {
                 if (type == typeof(SomeDecimalSetting))
@@ -35,7 +35,7 @@ namespace NimbleConfig.Core.Tests
         [Fact]
         public void CanResolveSettingWithNameAttribute()
         {
-            var options = ConfigurationOptionFactory.Create();
+            var options = ConfigurationOptions.Create();
             options.WithNamingScheme((type, name) =>
             {
                 if (type == typeof(SomeDecimalSettingWithAttribute))
@@ -59,7 +59,7 @@ namespace NimbleConfig.Core.Tests
         {
             var count = 0;
 
-            var options = ConfigurationOptionFactory.Create();
+            var options = ConfigurationOptions.Create();
             options.WithReader((type, reader) =>
             {
                 type.ShouldBe(typeof(SomeDecimalSetting));
@@ -90,7 +90,7 @@ namespace NimbleConfig.Core.Tests
         {
             var count = 0;
 
-            var options = ConfigurationOptionFactory.Create();
+            var options = ConfigurationOptions.Create();
             options.WithParser((type, parser) =>
             {
                 type.ShouldBe(typeof(SomeDecimalSetting));
@@ -121,7 +121,7 @@ namespace NimbleConfig.Core.Tests
         {
             var count = 0;
 
-            var options = ConfigurationOptionFactory.Create();
+            var options = ConfigurationOptions.Create();
             options.WithConstructor((type, constructor) =>
             {
                 type.ShouldBe(typeof(SomeDecimalSetting));

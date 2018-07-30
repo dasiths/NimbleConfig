@@ -121,5 +121,17 @@ namespace NimbleConfig.Core.Extensions
 
             return configurationOptions.WithNamingScheme(keyNameResolverFunc);
         }
+
+        public static IConfigurationOptions ThrowExceptionIfSettingsAreMissing(this IConfigurationOptions configurationOptions)
+        {
+            configurationOptions.MissingConfigurationStratergy = MissingConfigurationStratergy.ThrowException;
+            return configurationOptions;
+        }
+
+        public static IConfigurationOptions IgnoreMissingSettings(this IConfigurationOptions configurationOptions)
+        {
+            configurationOptions.MissingConfigurationStratergy = MissingConfigurationStratergy.IgnoreAndUseDefaultOrNull;
+            return configurationOptions;
+        }
     }
 }
