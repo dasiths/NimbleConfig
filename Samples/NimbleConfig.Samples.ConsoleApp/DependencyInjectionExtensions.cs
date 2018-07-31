@@ -41,7 +41,7 @@ namespace NimbleConfig.Samples.ConsoleApp
             services.AddSingleton<IResolver<IValueConstructor>, ValueConstructorResolver>();
 
             // Add configuration factory
-            services.AddSingleton<ConfigurationFactory>();
+            services.AddSingleton<IConfigurationFactory, ConfigurationFactory>();
 
             var settingTypes = GetConfigurationSettings(assemblies);
 
@@ -49,7 +49,7 @@ namespace NimbleConfig.Samples.ConsoleApp
             {
                 services.AddSingleton(settingType, (s) =>
                         {
-                            var factory = s.GetService<ConfigurationFactory>();
+                            var factory = s.GetService<IConfigurationFactory>();
                             return factory.CreateConfigurationSetting(settingType);
                         });
             }

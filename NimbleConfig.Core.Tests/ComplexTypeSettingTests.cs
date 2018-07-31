@@ -10,7 +10,7 @@ namespace NimbleConfig.Core.Tests
 {
     public class ComplexTypeSettingTests
     {
-        private ConfigurationFactory _configurationFactory;
+        private IConfigurationFactory _configurationFactory;
 
         public ComplexTypeSettingTests()
         {

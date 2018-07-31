@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NimbleConfig.Core.Factory;
 
 namespace NimbleConfig.Samples.ConsoleApp
 {
@@ -26,6 +27,10 @@ namespace NimbleConfig.Samples.ConsoleApp
             var setting = serviceProvider.GetRequiredService<SomeSetting>();
 
             Console.WriteLine($"Value of {nameof(SomeSetting)} is '{setting.Value}'");
+
+            // Quick and dirty way
+            Console.WriteLine($"Value of {nameof(SomeSetting)} is '{QuickConfigFactory.GetSetting<SomeSetting>(configuration).Value}'");
+
             Console.ReadLine();
         }
     }
