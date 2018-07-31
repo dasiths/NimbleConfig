@@ -20,11 +20,6 @@ namespace NimbleConfig.Samples.Aspnetcore
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json");
 
-            /* Note:
-             * reloadOnChange: true works only if you have a
-             * lifetime scope for your config settings
-             */
-
             Configuration = builder.Build();
         }
 
@@ -36,24 +31,23 @@ namespace NimbleConfig.Samples.Aspnetcore
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Ignore missing settings
-            var configOptions = ConfigurationOptions.Create().IgnoreMissingSettings();
+            var configOptions = ConfigurationOptions.Create()
+                .WithExceptionForMissingSettings();
 
             // Wire up our settings
             services.AddConfigurationSettings()
-                .WithConfigurationOptions(configOptions)
+                .WithSingletonInstances()
+                .UsingOptionsIn(configOptions)
+                .UsingLogger<MyConfigLogger>()
                 .AndBuild();
 
-            /* Note: You can use AddConfigurationSettings().WithScopedInstances().AndBuild()
-             * for per request settings that read the latest value from config
-             */
+            // Or use the built in console logger like this: 
+            //.UsingLogger<ConsoleConfigLogger>()
+
+            // Note: You can use .WithScopedInstances() for per request inatance of settings
+            // This works great withg the 'reloadOnChange' option for appsettings.json files
 
             services.AddLogging();
-
-            // Optional: Adding custom logger that implements IConfigLogger
-            services.AddSingleton<IConfigLogger, MyConfigLogger>();
-
-            // Or use the built in console logger like this:
-            // services.AddSingleton<IConfigLogger, ConsoleConfigLogger>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

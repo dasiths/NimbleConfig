@@ -6,9 +6,9 @@ namespace NimbleConfig.Samples.Aspnetcore
 {
     public class MyConfigLogger: IConfigLogger
     {
-        private readonly ILogger<MyConfigLogger> _logger;
+        private readonly ILogger<IConfigLogger> _logger;
 
-        public MyConfigLogger(ILogger<MyConfigLogger> logger)
+        public MyConfigLogger(ILogger<IConfigLogger> logger)
         {
             _logger = logger;
         }

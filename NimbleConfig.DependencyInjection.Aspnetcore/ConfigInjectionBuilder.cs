@@ -7,6 +7,7 @@ using NimbleConfig.Core.Configuration;
 using NimbleConfig.Core.ConfigurationReaders;
 using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Factory;
+using NimbleConfig.Core.Logging;
 using NimbleConfig.Core.Options;
 using NimbleConfig.Core.Parsers;
 using NimbleConfig.Core.Resolvers;
@@ -16,20 +17,22 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
 {
     public class ConfigInjectionBuilder
     {
-        public readonly IServiceCollection Services;
-        public IConfigurationOptions Options { get; set; }
-        public ServiceLifetime SettingLifetime { get; set; }
-        public Type[] IgnoreTypes { get; set; }
-        public Assembly[] Assemblies { get; set; }
+        private readonly IServiceCollection _services;
+        private IConfigurationOptions Options { get; set; }
+        private ServiceLifetime SettingLifetime { get; set; }
+        private Type[] IgnoreTypes { get; set; }
+        private Assembly[] Assemblies { get; set; }
+        private Type LoggerType { get; set; }
 
         private bool _isBuilt = false;
 
         public ConfigInjectionBuilder(IServiceCollection services)
         {
-            Services = services ?? throw new ArgumentNullException(nameof(services));
+            _services = services ?? throw new ArgumentNullException(nameof(services));
             SettingLifetime = ServiceLifetime.Singleton;
             Options = ConfigurationOptions.Create();
             Assemblies = new[] { Assembly.GetEntryAssembly() };
+            LoggerType = null;
         }
 
         public static ConfigInjectionBuilder Create(IServiceCollection services)
@@ -37,13 +40,13 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             return new ConfigInjectionBuilder(services);
         }
 
-        public ConfigInjectionBuilder WithConfigurationOptions(IConfigurationOptions configurationOptions)
+        public ConfigInjectionBuilder UsingOptionsIn(IConfigurationOptions configurationOptions)
         {
             Options = configurationOptions;
             return this;
         }
 
-        public ConfigInjectionBuilder ScanningAssemblies(Assembly[] assemblies)
+        public ConfigInjectionBuilder ByScanning(Assembly[] assemblies)
         {
             Assemblies = assemblies;
             return this;
@@ -61,7 +64,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             return this;
         }
 
-        public ConfigInjectionBuilder WithInstancesOf(ServiceLifetime serviceLifetime)
+        public ConfigInjectionBuilder WithLifetemOf(ServiceLifetime serviceLifetime)
         {
             SettingLifetime = serviceLifetime;
             return this;
@@ -70,6 +73,12 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
         public ConfigInjectionBuilder IgnoringTheseTypes(Type[] types)
         {
             IgnoreTypes = types;
+            return this;
+        }
+
+        public ConfigInjectionBuilder UsingLogger<T>() where T : IConfigLogger
+        {
+            LoggerType = typeof(T);
             return this;
         }
 
@@ -83,21 +92,21 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             _isBuilt = true;
 
             // Add required default resolvers as singletons
-            Services.AddSingleton<IResolver<IKeyName>, KeyNameResolver>();
-            Services.AddSingleton<IResolver<IParser>, ParserResolver>();
-            Services.AddSingleton<IResolver<IConfigurationReader>, ConfigurationReaderResolver>();
-            Services.AddSingleton<IResolver<IValueConstructor>, ValueConstructorResolver>();
+            _services.AddSingleton<IResolver<IKeyName>, KeyNameResolver>();
+            _services.AddSingleton<IResolver<IParser>, ParserResolver>();
+            _services.AddSingleton<IResolver<IConfigurationReader>, ConfigurationReaderResolver>();
+            _services.AddSingleton<IResolver<IValueConstructor>, ValueConstructorResolver>();
 
             // Add configuration options instance
             Options = Options ?? Core.Options.ConfigurationOptions.Create();
-            Services.AddSingleton<IConfigurationOptions>((s) => Options);
+            _services.AddSingleton<IConfigurationOptions>((s) => Options);
 
             // Construct the configuration factory service descriptor
             var configDescriptor = new ServiceDescriptor(typeof(ConfigurationFactory),
                 typeof(ConfigurationFactory),
                 SettingLifetime);
 
-            Services.Add(configDescriptor);
+            _services.Add(configDescriptor);
 
             // Get the setting types in the assemblies specified
             var settingTypes = SettingScanner.GetConfigurationSettings(Assemblies);
@@ -119,7 +128,12 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
                     },
                     SettingLifetime);
 
-                Services.Add(settingDescriptor);
+                _services.Add(settingDescriptor);
+            }
+
+            if (LoggerType != null)
+            {
+                _services.AddSingleton(typeof(IConfigLogger), LoggerType);
             }
         }
     }
