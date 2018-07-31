@@ -70,7 +70,7 @@ In the NuGet Package Manager Console, type:
     }
 ```
 ---
-If you have to **access the settigs directly** without constructing a factory yourself, you can try this. (Be warned. This will create a factory for each call)
+If you have to **access the settings directly** without constructing a factory yourself, you can try this. (Be warned! This will create a factory for each call. Only do this if there is no other way.)
 
 ```C#
     // You need to provide an instance of IConfiguration
