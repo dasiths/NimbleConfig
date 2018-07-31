@@ -8,7 +8,7 @@ namespace NimbleConfig.Core.Tests.Setup
 {
     public class ConfigurationFactoryCreator
     {
-        public static ConfigurationFactory Create(IConfigurationOptions options = null)
+        public static IConfigurationFactory Create(IConfigurationOptions options = null)
         {
             // Construct the IConfiguration
             var builder = new ConfigurationBuilder()

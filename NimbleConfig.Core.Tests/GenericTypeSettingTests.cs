@@ -10,7 +10,7 @@ namespace NimbleConfig.Core.Tests
 {
     public class GenericTypeSettingTests
     {
-        private ConfigurationFactory _configurationFactory;
+        private IConfigurationFactory _configurationFactory;
 
         public GenericTypeSettingTests()
         {

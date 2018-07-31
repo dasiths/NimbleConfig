@@ -11,7 +11,7 @@ using NimbleConfig.Core.ValueConstructors;
 
 namespace NimbleConfig.Core.Factory
 {
-    public class ConfigurationFactory
+    public class ConfigurationFactory : IConfigurationFactory
     {
         private readonly IResolver<IKeyName> _keyNameResolver;
         private readonly IResolver<IConfigurationReader> _configurationReaderResolver;

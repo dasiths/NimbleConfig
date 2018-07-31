@@ -98,11 +98,11 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
             _services.AddSingleton<IResolver<IValueConstructor>, ValueConstructorResolver>();
 
             // Add configuration options instance
-            Options = Options ?? Core.Options.ConfigurationOptions.Create();
+            Options = Options ?? ConfigurationOptions.Create();
             _services.AddSingleton<IConfigurationOptions>((s) => Options);
 
             // Construct the configuration factory service descriptor
-            var configDescriptor = new ServiceDescriptor(typeof(ConfigurationFactory),
+            var configDescriptor = new ServiceDescriptor(typeof(IConfigurationFactory),
                 typeof(ConfigurationFactory),
                 SettingLifetime);
 
@@ -123,7 +123,7 @@ namespace NimbleConfig.DependencyInjection.Aspnetcore
                 var settingDescriptor = new ServiceDescriptor(settingType,
                     (s) =>
                     {
-                        var factory = s.GetService<ConfigurationFactory>();
+                        var factory = s.GetService<IConfigurationFactory>();
                         return factory.CreateConfigurationSetting(settingType);
                     },
                     SettingLifetime);

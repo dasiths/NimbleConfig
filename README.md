@@ -69,12 +69,19 @@ In the NuGet Package Manager Console, type:
         services.AddConfigurationSettings().AndBuild();
     }
 ```
+---
+If you have to **access the settigs directly** without constructing a factory yourself, you can try this. (Be warned. This will create a factory for each call)
+
+```C#
+    // You need to provide an instance of IConfiguration
+    var value = QuickConfigFactory.GetSetting<SomeSetting>(configuration).Value
+```
 
 ## Want more?
 
 #### See the sample projects for more advanced use cases like complex types, enums and arrays. Checkout the `ConsoleApp` example on how to use it in a non aspnetcore app. 
 
-#### NimbleConfig provides full customisation of resolving the name (`IKeyName`), reader (`IConfigurationReader`), parser (`IParser`), constructor (`IValueConstructor`) for your setting. It also allows hooks in to the setting creation life cycle via the `ConfigurationOptions`.
+NimbleConfig provides **full customisation** of the setting creation via **lifetime hooks** in `IConfigurationOptions`. It also allows implementing your own types for the name (`IKeyName`), reader (`IConfigurationReader`), parser (`IParser`), constructor (`IValueConstructor`) if you want full control.
 
 ---
 
