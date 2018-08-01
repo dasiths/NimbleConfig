@@ -1,6 +1,6 @@
 # NimbleConfig [![Build status](https://ci.appveyor.com/api/projects/status/4wbdssddl5qxukk7?svg=true)](https://ci.appveyor.com/project/dasiths/nimbleconfig) [![NuGet](https://img.shields.io/nuget/v/NimbleConfig.DependencyInjection.Aspnetcore.svg)](https://www.nuget.org/packages/NimbleConfig.DependencyInjection.Aspnetcore)
 
-### A simple, unambitious, convention-based configuration injector for .net standard using IConfiguration (`Microsoft.Extensions.Configuration`) with full support for AspNetCore.
+### A simple, unambitious, convention-based configuration injector for .NET using IConfiguration (`Microsoft.Extensions.Configuration`) with full support for AspNetCore.
   
 ---
 
@@ -81,7 +81,9 @@ If you have to **access the settings directly** without constructing a factory y
 
 #### See the sample projects for more advanced use cases like complex types, enums and arrays. Checkout the `ConsoleApp` example on how to use it in a non aspnetcore app. 
 
-NimbleConfig provides **full customisation** of the setting creation via **lifetime hooks** in `IConfigurationOptions`. It also allows implementing your own types for the name (`IKeyName`), reader (`IConfigurationReader`), parser (`IParser`), constructor (`IValueConstructor`) if you want full control.
+NimbleConfig provides **full customisation** of the setting creation via **lifetime hooks** in `IConfigurationOptions`. These lifetime hooks also allow you to resolve your custom setting key name (`IKeyName`), configuration reader (`IConfigurationReader`), parser (`IParser`) and value constructor (`IValueConstructor`) per type, giving you the ability to control every aspect of the setting creation.
+
+The `NimbleConfig.DependencyInjection.Aspnetcore` package allows you to use the `Microsoft.Extensions.DependencyInjection` that comes with Aspnetcore. You can use it with **any IOC container** like Autofac, StructureMap or Ninject. See the `ConfigInjectionBuilder` if you need guidance.
 
 ---
 
