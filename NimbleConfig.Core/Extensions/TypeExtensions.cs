@@ -5,7 +5,7 @@ namespace NimbleConfig.Core.Extensions
 {
     public static class TypeExtensions
     {
-        public static T EnsureNotNull<T>(this T objectToCheck, string paramName)
+        internal static T EnsureNotNull<T>(this T objectToCheck, string paramName)
         {
             if (objectToCheck != null)
             {
@@ -32,11 +32,21 @@ namespace NimbleConfig.Core.Extensions
 
         public static bool IsComplexTypeConfigurationSetting(this Type configType)
         {
+            if (configType.IsNotAnInstantiableClass())
+            {
+                return false;
+            }
+
             return typeof(IComplexConfigurationSetting).IsAssignableFrom(configType);
         }
 
         public static bool IsGenericTypeConfigurationSetting(this Type configType)
         {
+            if (configType.IsNotAnInstantiableClass())
+            {
+                return false;
+            }
+
             try
             {
                 var baseType = GetImmidiateTypeAfterObject(configType);
@@ -48,10 +58,13 @@ namespace NimbleConfig.Core.Extensions
             }
         }
 
+        private static bool IsNotAnInstantiableClass(this Type configType)
+        {
+            return configType.IsAbstract || !configType.IsClass;
+        }
+
         internal static Type GetGenericTypeOfConfigurationSetting(this Type configType)
         {
-            // Todo: better inspection and guards
-
             if (IsGenericTypeConfigurationSetting(configType))
             {
                 var baseType = GetImmidiateTypeAfterObject(configType);
