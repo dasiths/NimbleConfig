@@ -81,9 +81,36 @@ If you have to **access the settings directly** without constructing a factory y
 
 #### See the sample projects for more advanced use cases like complex types, enums and arrays. Checkout the `ConsoleApp` example on how to use it in a non aspnetcore app. 
 
-NimbleConfig provides **full customisation** of the setting creation via **lifetime hooks** in `IConfigurationOptions`. These lifetime hooks also allow you to resolve your custom setting key name (`IKeyName`), configuration reader (`IConfigurationReader`), parser (`IParser`) and value constructor (`IValueConstructor`) per type, giving you the ability to control every aspect of the setting creation.
+NimbleConfig provides **full customisation** of the setting creation via **lifetime hooks** in `IConfigurationOptions`. This is done via creating your own resolvers for the name (`IKeyName`), reader (`IConfigurationReader`), parser (`IParser`), constructor (`IValueConstructor`).
 
-The `NimbleConfig.DependencyInjection.Aspnetcore` package allows you to use the `Microsoft.Extensions.DependencyInjection` that comes with Aspnetcore. You can use it with **any IOC container** like Autofac, StructureMap or Ninject. See the `ConfigInjectionBuilder` if you need guidance.
+__Example of setting a prefix uisng the configuration options lifetime hooks__
+```C#
+
+    var configOptions = ConfigurationOptions.Create()
+                         .WithGlobalPrefix("MyAppSettings:") // Adding a global prefix to key names
+                         .WithNamingScheme((type, name) => // Resolving type specific key names
+                         {
+                             if (type == typeof(SomeSetting))
+                             {
+                                 return new KeyName("AnotherPrefix", name.QualifiedKeyName);
+                             }
+                         
+                             return name;
+                         });
+    
+    // Then just pass it in to the builder uisng the fluent api
+	
+    services.AddConfigurationSettings()
+            .UsingOptionsIn(configOptions)
+            .AndBuild();
+```
+						 
+**These fluent apis allow you to easily add your custom logic.** They take a function which accepts a type and the auto resolved value as seen in the above example.
+ 
+- `.WithNamingScheme()` for setting configuration key names.
+- `.WithReader()` for setting a custom config reader.
+- `.WithParser()` for setting a custom parser.
+- `.WithConstructor()` for setting a value constructor.
 
 ---
 
