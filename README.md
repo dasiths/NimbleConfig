@@ -70,11 +70,11 @@ In the NuGet Package Manager Console, type:
     }
 ```
 ---
-If you have to **access the settings directly** without constructing a factory yourself, you can try this. (Be warned! This will create a factory for each call. Only do this if there is no other way.)
+You can try this if you have to __access some configuration setting prior to setting up the DI__ container. (Be warned! This will create a instance of a factory for each call. Only do this if there is no other way.)
 
 ```C#
-    // You need to provide an instance of IConfiguration
-    var value = QuickConfigFactory.GetSetting<SomeSetting>(configuration).Value
+    // You still need to provide an instance of IConfiguration
+    var dirtySetting = configuration.QuickReadSetting<SomeSetting>();
 ```
 
 ## Want more?
@@ -87,16 +87,16 @@ __Example of setting a prefix uisng the configuration options lifetime hooks__
 ```C#
 
     var configOptions = ConfigurationOptions.Create()
-                         .WithGlobalPrefix("MyAppSettings:") // Adding a global prefix to key names
-                         .WithNamingScheme((type, name) => // Resolving type specific key names
-                         {
-                             if (type == typeof(SomeSetting))
-                             {
-                                 return new KeyName("AnotherPrefix", name.QualifiedKeyName);
-                             }
+                            .WithGlobalPrefix("MyAppSettings:") // Adding a global prefix to key names
+                            .WithNamingScheme((type, name) => // Resolving type specific key names
+                            {
+                                if (type == typeof(SomeSetting)) // selectively apply logic
+                                {
+                                    return new KeyName("AnotherPrefix", name.QualifiedKeyName);
+                                }
                          
-                             return name;
-                         });
+                                return name; // return the auto-resolved one if no change is needed
+                            });
     
     // Then just pass it in to the builder uisng the fluent api
 	
@@ -105,12 +105,12 @@ __Example of setting a prefix uisng the configuration options lifetime hooks__
             .AndBuild();
 ```
 						 
-**These fluent apis allow you to easily add your custom logic.** They take a function which accepts a type and the auto resolved value as seen in the above example.
+**These fluent apis allow you to easily add your custom logic.** They take a function which accepts a type and the auto-resolved instance as seen in the above example.
  
 - `.WithNamingScheme()` for setting configuration key names.
 - `.WithReader()` for setting a custom config reader.
 - `.WithParser()` for setting a custom parser.
-- `.WithConstructor()` for setting a value constructor.
+- `.WithConstructor()` for setting a custom value constructor.
 
 ---
 

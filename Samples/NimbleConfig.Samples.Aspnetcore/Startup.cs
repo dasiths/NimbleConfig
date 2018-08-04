@@ -1,14 +1,14 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NimbleConfig.Core.Extensions;
-using NimbleConfig.Core.Factory;
-using NimbleConfig.Core.Logging;
 using NimbleConfig.Core.Options;
 using NimbleConfig.DependencyInjection.Aspnetcore;
+using NimbleConfig.Samples.Aspnetcore.Settings;
 
 namespace NimbleConfig.Samples.Aspnetcore
 {
@@ -21,6 +21,11 @@ namespace NimbleConfig.Samples.Aspnetcore
                 .AddJsonFile("appsettings.json");
 
             Configuration = builder.Build();
+
+            // Use this method *ONLY* if you need to read a setting prior to setting up your IOC container
+            // This quick reads create a factory per use so use it as a last resort
+            var dirtySetting = Configuration.QuickReadSetting<SomeSetting>();
+            Console.WriteLine($"Dirty read of {typeof(SomeSetting).Name}: {dirtySetting.Value}");
         }
 
         public IConfiguration Configuration { get; }
@@ -30,7 +35,7 @@ namespace NimbleConfig.Samples.Aspnetcore
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // Ignore missing settings
+            // Throw an exception if missing settings are being used
             var configOptions = ConfigurationOptions.Create()
                 .WithExceptionForMissingSettings();
 
