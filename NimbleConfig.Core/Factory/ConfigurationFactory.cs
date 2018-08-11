@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using NimbleConfig.Core.Configuration;
 using NimbleConfig.Core.ConfigurationReaders;
+using NimbleConfig.Core.Exceptions;
 using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Logging;
 using NimbleConfig.Core.Options;
@@ -68,9 +69,16 @@ namespace NimbleConfig.Core.Factory
                 reader.EnsureNotNull(nameof(IConfigurationReader));
                 parser.EnsureNotNull(nameof(IParser));
                 valueConstructor.EnsureNotNull(nameof(IValueConstructor));
+                
+                // Throw exception if missing configuration is required
+                if (_configurationOptions.MissingConfigurationStratergy == MissingConfigurationStratergy.ThrowException
+                    && !reader.ValueExists(_configuration, configType, keyName))
+                {
+                    throw new ConfigurationSettingMissingException(configType, keyName);
+                }
 
                 // Read and parse the value
-                var rawValue = reader.Read(_configuration, configType, keyName, _configurationOptions.MissingConfigurationStratergy);
+                var rawValue = reader.Read(_configuration, configType, keyName);
                 var value = parser.Parse(configType, rawValue);
 
                 // Set the value

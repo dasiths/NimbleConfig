@@ -2,16 +2,14 @@
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 using NimbleConfig.Core.Configuration;
-using NimbleConfig.Core.Exceptions;
 using NimbleConfig.Core.Extensions;
 using NimbleConfig.Core.Logging;
-using NimbleConfig.Core.Options;
 
 namespace NimbleConfig.Core.ConfigurationReaders
 {
-    public class GenericNonValueTypeConfigurationReader: IConfigurationReader
+    public class GenericNonValueTypeConfigurationReader: ConfigurationReader
     {
-        public object Read(IConfiguration configuration, Type configType, IKeyName keyName, MissingConfigurationStratergy configurationStratergy)
+        public override object Read(IConfiguration configuration, Type configType, IKeyName keyName)
         {
             var valueType = configType.GetGenericTypeOfConfigurationSetting();
             var elementType = valueType.GetElementType();
@@ -22,11 +20,6 @@ namespace NimbleConfig.Core.ConfigurationReaders
             {
                 // Return null if no section exists
                 StaticLoggingHelper.Warning($"No configuration for '{key}' was found.");
-
-                if (configurationStratergy == MissingConfigurationStratergy.ThrowException)
-                {
-                    throw new ConfigurationSettingMissingException(configType, keyName);
-                }
 
                 return null;
             }
