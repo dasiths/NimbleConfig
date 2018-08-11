@@ -9,7 +9,10 @@ namespace NimbleConfig.Core.ConfigurationReaders
     {
         object Read(IConfiguration configuration,
             Type configType,
-            IKeyName keyName,
-            MissingConfigurationStratergy configurationStratergy);
+            IKeyName keyName);
+
+        bool ValueExists(IConfiguration configuration,
+            Type configType,
+            IKeyName keyName);
     }
 }
