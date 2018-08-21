@@ -33,6 +33,10 @@ namespace NimbleConfig.Samples.Aspnetcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(Configuration); // This is needed if you want to use the same config instance built in the constructor,
+            // Else it will use the default one from the webhost builder
+            // https://stackoverflow.com/questions/46574521/is-services-addsingletoniconfiguration-really-needed-in-net-core-2-api
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // Throw an exception if missing settings are being used
