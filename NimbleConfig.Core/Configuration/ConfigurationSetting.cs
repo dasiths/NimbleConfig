@@ -21,6 +21,8 @@ namespace NimbleConfig.Core.Configuration
 
             Value = value;
         }
+        
+        public static implicit operator TValue(ConfigurationSetting<TValue> d) => d.Value;
     }
 
 }

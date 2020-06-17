@@ -91,6 +91,13 @@ namespace NimbleConfig.Core.Tests
             SomeUnresolvedSetting config = _configurationFactory.CreateConfigurationSetting(typeof(SomeUnresolvedSetting));
             string.IsNullOrEmpty(config.Value).ShouldBeTrue();
         }
+        
+        [Fact]
+        public void ImplicitConversionShouldBeTheSameAsValue()
+        {
+            SomeIntSetting config = _configurationFactory.CreateConfigurationSetting(typeof(SomeIntSetting));
+            config.Value.ShouldBe(config);
+        }
 
         [Fact]
         public void MissingStringSettingThrowsException()
